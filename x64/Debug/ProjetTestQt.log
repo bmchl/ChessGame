@@ -1,0 +1,14 @@
+﻿  Reading Qt configuration (C:/Qt/6.3.0/msvc2019_64/bin/qmake)
+  moc Calc.hpp
+  moc CalcWindow.hpp
+  bibliotheque_cours.cpp
+  verification_allocation.cpp
+  Calc.cpp
+  CalcWindow.cpp
+  gtest-all.cc
+  main.cpp
+  TestCalc.cpp
+  moc_Calc.cpp
+  moc_CalcWindow.cpp
+     Creating library C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.lib and object C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exp
+  ProjetTestQt.vcxproj -> C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exe

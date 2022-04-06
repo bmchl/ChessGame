@@ -31,7 +31,7 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.2.1_msvc2019_64</QtInstall>
+    <QtInstall>6.3.0_msvc2019_64</QtInstall>
     <QtModules>core;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -68,7 +68,7 @@
       <SDLCheck>true</SDLCheck>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <Profile>true</Profile>
@@ -122,6 +122,13 @@
   <ItemGroup>
     <QtMoc Include="Calc.hpp" />
     <QtMoc Include="CalcWindow.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Board.hpp" />
+    <ClInclude Include="Chess.hpp" />
+    <QtMoc Include="Piece.hpp" />
+    <ClInclude Include="Player.hpp" />
+    <QtMoc Include="Square.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
