@@ -1,9 +1,7 @@
 #pragma once
-
 #pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 #include <QObject>
 #pragma pop()
-#include <functional>
 #include "Chess.hpp"
 using namespace std;
 

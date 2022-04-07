@@ -1,7 +1,20 @@
-﻿#include "Calc.hpp"
-#include "CalcWindow.hpp"
+﻿#include "Chess.hpp"
+//#include "CalcWindow.hpp"
 
-#include <QApplication>
+//#include <QApplication>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <limits>
+#include <algorithm>
+#include <sstream>
+#include <forward_list>
+#include <numeric>
+#include "cppitertools/range.hpp"
+#include "cppitertools/enumerate.hpp"
+#include "gsl/span"
+#include <set>
 
 #if __has_include("bibliotheque_cours.hpp")
 #include "bibliotheque_cours.hpp"
@@ -28,13 +41,25 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 	//NOTE: C'est normal que la couverture de code dans l'Explorateur de tests de Visual Studio ne couvre pas la fin de cette fonction ni la fin du main après l'appel à cette fonction puisqu'il exécute uniquement les tests Google Test dans l'appel ci-dessus.
 }
 
+using namespace std;
+using namespace iter;
+using namespace gsl;
+
 int main(int argc, char *argv[])
 {
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
-	QApplication app(argc, argv);
+	//QApplication app(argc, argv);
 	initialiserBibliothequeCours(argc, argv);
 
-	CalcWindow calcWindow;
-	calcWindow.show();
-	return app.exec();
+	//CalcWindow calcWindow;
+	//calcWindow.show();
+	//return app.exec();
+	Board board(8); 
+	for (int i= 0; i<board.size; i++)
+	{
+		for (auto square : board[i])
+		{
+			cout << square;
+		}
+	}
 }

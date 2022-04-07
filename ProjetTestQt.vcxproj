@@ -124,11 +124,11 @@
     <QtMoc Include="CalcWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Board.hpp" />
+    <ClInclude Include="Board.hpp" />
     <ClInclude Include="Chess.hpp" />
     <QtMoc Include="Piece.hpp" />
     <ClInclude Include="Player.hpp" />
-    <QtMoc Include="Square.hpp" />
+    <ClInclude Include="Square.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
