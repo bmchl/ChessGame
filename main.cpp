@@ -1,4 +1,5 @@
 ﻿#include "Chess.hpp"
+#include "Piece.hpp"
 //#include "CalcWindow.hpp"
 
 //#include <QApplication>
@@ -36,7 +37,7 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 
 	// cdbg.setTee(&clog);  // Décommenter cette ligne pour que cdbg affiche sur la console en plus de la "Sortie" du débogueur.
 	
-	bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un résultat de test.
+	//bibliotheque_cours::executerGoogleTest(argc, argv); // Attention de ne rien afficher avant cette ligne, sinon l'Explorateur de tests va tenter de lire votre affichage comme un résultat de test.
 	#endif
 	//NOTE: C'est normal que la couverture de code dans l'Explorateur de tests de Visual Studio ne couvre pas la fin de cette fonction ni la fin du main après l'appel à cette fonction puisqu'il exécute uniquement les tests Google Test dans l'appel ci-dessus.
 }
@@ -54,12 +55,17 @@ int main(int argc, char *argv[])
 	//CalcWindow calcWindow;
 	//calcWindow.show();
 	//return app.exec();
-	Board board(8); 
-	for (int i= 0; i<board.size; i++)
-	{
-		for (auto square : board[i])
-		{
-			cout << square;
-		}
-	}
+	Board board; 
+	cout << "let's access the square at position (0,4) tbh" << endl;
+	King king(board, 'W');
+	cout << king;
+	cout << *board[0][4]->currentPiece;
+	//for (int i= 0; i<board.size; i++)
+	//{
+	//	for (auto square : board[i])
+	//	{
+	//		//cout << "printing something" << endl;
+	//		cout << *square << endl;
+	//	}
+	//}
 }

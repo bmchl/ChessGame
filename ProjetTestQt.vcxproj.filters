@@ -51,12 +51,6 @@
     <QtMoc Include="CalcWindow.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Board.hpp">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Square.hpp">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Piece.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
