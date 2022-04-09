@@ -7,6 +7,7 @@
 #include <iterator>
 #include "gsl/span"
 #include <vector>
+#include <list>
 using gsl::span;
 using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de le permettre dans l'énoncé.
 
@@ -19,32 +20,45 @@ class Board;
 class Square;
 class Piece;
 
-class Piece //: public QObject
+class Board //: public QObject
 {
 	//Q_OBJECT
 public:
-	//Piece() = default;
-	Piece(Board& board, char color) :board_(board), color_(color)
+	int size = 8;
+	int max = 0;
+	Board()
 	{
-		initializePosition();
+		size = 8;
+		max = size - 1;
+		populate();
+		//squares = make_unique< shared_ptr<Square>>[size][size] = 0;
+	};
+	shared_ptr<Square> squares[8][8];
+	//vector<shared_ptr<Square>> vectorSquares;
+	void populate()
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			for (int k = 0; k < 8; k++)
+			{
+				//squares[i][k] = make_shared<Square>(i, k);
+
+				//shared_ptr<Square> newSquare = make_shared<Square>(i, k);
+				squares[i][k] = make_shared<Square>(i, k);
+			}
+		}
 	}
-	virtual void initializePosition() { currentPosition = make_shared<Square>(0, 0); };
-	//virtual void setPosition(shared_ptr<Square> newPosition) = 0;
-	virtual void updatePossiblePositions() {};
-	//virtual void checkValidMove(Square* position) {};
-	virtual void talk(ostream& os) const { os << "just a plain piece tbh"; };
-	char color_ = 'W';
-protected:
-	Board& board_;
-	shared_ptr<Square> currentPosition;
-	vector<shared_ptr<Square>> possiblePositions;
+	/*vector<shared_ptr<Square>> operator[](int x)
+	{
+		vector<shared_ptr<Square>>::const_iterator first = vectorSquares.cbegin() + (x * size);
+		vector<shared_ptr<Square>>::const_iterator last = vectorSquares.cbegin() + x * size + size;
+		vector<shared_ptr<Square>> subSquares(first, last);
+		return subSquares;
+	}*/
+private:
+
 };
 
-ostream& operator<< (ostream& os, const Piece& piece)
-{
-	piece.talk(os);
-	return os;
-}
 class Square //:public QObject
 {
 	//Q_OBJECT
@@ -56,7 +70,7 @@ public:
 	int xAxis_ = 0;
 	int yAxis_ = 0;
 	int maxCoordinates_ = 7;
-	shared_ptr<Piece> currentPiece;
+	shared_ptr<Piece> currentPiece = nullptr;
 private:
 
 };
@@ -65,39 +79,75 @@ ostream& operator<< (ostream& os, const Square& square)
 	os << "i am a square at position ( " << square.xAxis_ << ", " << square.yAxis_ << " ) \n";
 	return os;
 }
-class Board //: public QObject
+
+class Piece //: public QObject
 {
 	//Q_OBJECT
 public:
-	int size = 8;
-	Board()
-	{ 
-		size = 8;
-		populate();
-		//squares = make_unique< shared_ptr<Square>>[size][size] = 0;
-	};
-	//unique_ptr<shared_ptr<Square>> squares[8][8];
-	vector<shared_ptr<Square>> vectorSquares;
-	void populate()
+	//Piece() = default;
+	Piece(Board& board, char color) :board_(board), color_(color)
 	{
-		for (int i = 0; i < size; i++)
+		initializePosition();
+	}
+	virtual void initializePosition() { currentPosition = make_shared<Square>(0, 0); };
+	virtual void setPosition(shared_ptr<Square> newPosition)
+	{
+		updatePossiblePositions();
+		if (isValidMove(newPosition))
 		{
-			for (int k = 0; k < size; k++)
+			board_.squares[currentPosition->xAxis_][currentPosition->yAxis_]->currentPiece = nullptr;
+			currentPosition = newPosition;
+
+			if (board_.squares[newPosition->xAxis_][newPosition->yAxis_]->currentPiece != nullptr)
 			{
-				//squares[i][k] = make_shared<Square>(i, k);
-				
-				//shared_ptr<Square> newSquare = make_shared<Square>(i, k);
-				vectorSquares.push_back(make_shared<Square>(i, k));
+				//cout << *board_.squares[newPosition->xAxis_][newPosition->yAxis_]->currentPiece;
+				cout << "i'm dead now" << endl;
+			}
+
+			assignToSquare(newPosition->xAxis_, newPosition->yAxis_);
+			cout << "switchin them positions for you <3" << endl;
+
+		}
+		else
+		{
+			cout << "invalid move sus try again" << endl;
+		}
+	};
+	virtual void assignToSquare(int X, int Y) {};
+	virtual void updatePossiblePositions() {};
+	virtual bool isValidMove(shared_ptr<Square> position) 
+	{
+		bool valid = false;
+		for (auto& possiblePosition : possiblePositions)
+		{
+			if ((position->xAxis_ == possiblePosition->xAxis_) &&
+				(position->yAxis_ == possiblePosition->yAxis_))
+			{
+				valid = true;
 			}
 		}
-	}
-	vector<shared_ptr<Square>> operator[](int x)
+		return valid;
+	};
+	virtual void talk(ostream& os) const { os << "just a plain piece tbh"; };
+	char color_ = 'W';
+	void addPossiblePosition(int newX, int newY)
 	{
-		vector<shared_ptr<Square>>::const_iterator first = vectorSquares.cbegin() + (x * size);
-		vector<shared_ptr<Square>>::const_iterator last = vectorSquares.cbegin() + x * size + size;
-		vector<shared_ptr<Square>> subSquares(first, last);
-		return subSquares;
+		if ((newX <= board_.max) &&
+			(newY <= board_.max) &&
+			(newX >= 0) &&
+			(newY >= 0))
+		{
+			possiblePositions.push_back(board_.squares[newX][newY]);
+		}
 	}
-private:
-
+protected:
+	Board& board_;
+	shared_ptr<Square> currentPosition;
+	vector<shared_ptr<Square>> possiblePositions;
 };
+
+ostream& operator<< (ostream& os, const Piece& piece)
+{
+	piece.talk(os);
+	return os;
+}

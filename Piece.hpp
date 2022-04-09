@@ -17,48 +17,42 @@ public:
 		switch (color_) 
 		{
 			case 'W':
-				currentPosition = board_[0][4];
-				board_[0][4]->currentPiece = make_shared<King>(*this);
+				currentPosition = board_.squares[0][4];
+				assignToSquare(0, 4);
 				break;
 			case 'B':
-				currentPosition = board_[7][4];
-				board_[7][4]->currentPiece = make_shared<King>(*this);
+				currentPosition = board_.squares[7][4];
+				assignToSquare(7, 4);
 				break;
 		}
 	};
-	//virtual void setPosition(shared_ptr<Square> newPosition) override { currentPosition = newPosition; };
+	void assignToSquare(int X, int Y)
+	{
+		board_.squares[X][Y]->currentPiece = make_shared<King>(*this);
+	}
 	void updatePossiblePositions() override 
 	{ 
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + 1][currentPosition->yAxis_]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + - 1][currentPosition->yAxis_]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_ + 1]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_ - 1]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_+ 1][currentPosition->yAxis_ + 1]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_ - 1][currentPosition->yAxis_ - 1]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + 1][currentPosition->yAxis_ - 1]);
-	//	possiblePositions.push_back(board_[currentPosition->xAxis_ - 1][currentPosition->yAxis_ + 1]);
+		addPossiblePosition(currentPosition->xAxis_,currentPosition->yAxis_);
+		addPossiblePosition(currentPosition->xAxis_+1, currentPosition->yAxis_);
+		addPossiblePosition(currentPosition->xAxis_-1, currentPosition->yAxis_);
+		addPossiblePosition(currentPosition->xAxis_, currentPosition->yAxis_+1);
+		addPossiblePosition(currentPosition->xAxis_, currentPosition->yAxis_-1);
+		addPossiblePosition(currentPosition->xAxis_+1, currentPosition->yAxis_+1);
+		addPossiblePosition(currentPosition->xAxis_ - 1, currentPosition->yAxis_ - 1);
+		addPossiblePosition(currentPosition->xAxis_ + 1, currentPosition->yAxis_ - 1);
+		addPossiblePosition(currentPosition->xAxis_ - 1, currentPosition->yAxis_ + 1);
 		
 		//remove_if(possiblePositions.begin(), possiblePositions.end(), [*this](auto& position) { return position->currentPiece->color_ == color_; });
 
-		//remove_if(possiblePositions.begin(), possiblePositions.end(), 
-		//	[*this](auto& position) 
-		//	{ 
-		//	return ((position->xAxis_ > position->maxCoordinates_) ||
-		//			(position->yAxis_ > position->maxCoordinates_) ||
-		//			(position->xAxis_ < 0) ||
-		//			(position->yAxis_ < 0));
-		//	});
-
-		//cout << "my possible positions rn are:" << endl;
-		//for (auto&& position : possiblePositions)
-		//{
-		//	cout << "(" << position->xAxis_ << "," << position->xAxis_ << ")" << endl;
-		//}
+		cout << "my possible positions rn are:" << endl;
+		for (auto&& position : possiblePositions)
+		{
+			cout << *position;
+		}
 	};
 	void talk(ostream& os) const override
 	{
-		os << "hello i am the king. i am currently at position (" << currentPosition->xAxis_ << " ," << currentPosition->yAxis_ << " ) \n";
+		os << "hello i am the king. i am currently at position (" << currentPosition->xAxis_ << "," << currentPosition->yAxis_ << ") \n";
 	}
 
 private:
@@ -72,11 +66,13 @@ class Queen : public Piece
 	{
 		switch (color_) {
 		case 'W':
-			currentPosition = board_[0][3];
-			board_[0][3]->currentPiece = make_shared<Piece>(*this);
+			currentPosition = board_.squares[0][3];
+			board_.squares[0][3]->currentPiece = make_shared<Piece>(*this);
+			break;
 		case 'B':
-			currentPosition = board_[7][3];
-			board_[7][3]->currentPiece = make_shared<Piece>(*this);
+			currentPosition = board_.squares[7][3];
+			board_.squares[7][3]->currentPiece = make_shared<Piece>(*this);
+			break;
 		}
 	};
 	virtual void setPosition() {};

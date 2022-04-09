@@ -60,15 +60,14 @@ int main(int argc, char *argv[])
 	cout << "let's access the square at position (0,4) tbh" << endl;
 	King king(board, 'W');
 	cout << king;
-	cout << *board[0][4]->currentPiece;
-	//king.updatePossiblePositions();
+	cout << *board.squares[0][4]->currentPiece;
 
-	//for (int i= 0; i<board.size; i++)
-	//{
-	//	for (auto square : board[i])
-	//	{
-	//		//cout << "printing something" << endl;
-	//		cout << *square << endl;
-	//	}
-	//}
+	king.setPosition(board.squares[1][4]);
+	cout << king;
+	king.setPosition(board.squares[0][3]);
+	cout << king;
+	king.setPosition(board.squares[7][3]);
+	cout << king;
+	king.setPosition(board.squares[7][7]);
+	cout << king;
 }
