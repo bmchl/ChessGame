@@ -26,14 +26,15 @@ public:
 	//Piece() = default;
 	Piece(Board& board, char color) :board_(board), color_(color)
 	{
+		initializePosition();
 	}
-	virtual void initializePosition() { currentPosition = make_shared<Square>(0,0); };
+	virtual void initializePosition() { currentPosition = make_shared<Square>(0, 0); };
 	//virtual void setPosition(shared_ptr<Square> newPosition) = 0;
-	//virtual void updatePossiblePositions() = 0;
+	virtual void updatePossiblePositions() {};
 	//virtual void checkValidMove(Square* position) {};
 	virtual void talk(ostream& os) const { os << "just a plain piece tbh"; };
-protected:
 	char color_ = 'W';
+protected:
 	Board& board_;
 	shared_ptr<Square> currentPosition;
 	vector<shared_ptr<Square>> possiblePositions;

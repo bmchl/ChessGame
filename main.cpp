@@ -55,11 +55,14 @@ int main(int argc, char *argv[])
 	//CalcWindow calcWindow;
 	//calcWindow.show();
 	//return app.exec();
+
 	Board board; 
 	cout << "let's access the square at position (0,4) tbh" << endl;
 	King king(board, 'W');
 	cout << king;
 	cout << *board[0][4]->currentPiece;
+	//king.updatePossiblePositions();
+
 	//for (int i= 0; i<board.size; i++)
 	//{
 	//	for (auto square : board[i])

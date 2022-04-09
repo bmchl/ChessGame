@@ -12,26 +12,57 @@ public:
 	{
 		initializePosition();
 	};
-	virtual void initializePosition() override
+	void initializePosition() override
 	{
 		switch (color_) 
 		{
 			case 'W':
 				currentPosition = board_[0][4];
-				board_[0][4]->currentPiece = make_shared<Piece>(*this);
+				board_[0][4]->currentPiece = make_shared<King>(*this);
 				break;
 			case 'B':
 				currentPosition = board_[7][4];
-				board_[7][4]->currentPiece = make_shared<Piece>(*this);
+				board_[7][4]->currentPiece = make_shared<King>(*this);
 				break;
 		}
 	};
 	//virtual void setPosition(shared_ptr<Square> newPosition) override { currentPosition = newPosition; };
-	//virtual void updatePossiblePositions() override { possiblePositions.push_back(board_[7][4]); };
+	void updatePossiblePositions() override 
+	{ 
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + 1][currentPosition->yAxis_]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + - 1][currentPosition->yAxis_]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_ + 1]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_][currentPosition->yAxis_ - 1]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_+ 1][currentPosition->yAxis_ + 1]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_ - 1][currentPosition->yAxis_ - 1]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_ + 1][currentPosition->yAxis_ - 1]);
+	//	possiblePositions.push_back(board_[currentPosition->xAxis_ - 1][currentPosition->yAxis_ + 1]);
+		
+		//remove_if(possiblePositions.begin(), possiblePositions.end(), [*this](auto& position) { return position->currentPiece->color_ == color_; });
+
+		//remove_if(possiblePositions.begin(), possiblePositions.end(), 
+		//	[*this](auto& position) 
+		//	{ 
+		//	return ((position->xAxis_ > position->maxCoordinates_) ||
+		//			(position->yAxis_ > position->maxCoordinates_) ||
+		//			(position->xAxis_ < 0) ||
+		//			(position->yAxis_ < 0));
+		//	});
+
+		//cout << "my possible positions rn are:" << endl;
+		//for (auto&& position : possiblePositions)
+		//{
+		//	cout << "(" << position->xAxis_ << "," << position->xAxis_ << ")" << endl;
+		//}
+	};
 	void talk(ostream& os) const override
 	{
-		os << "hello i am the king. i am currently position (" << currentPosition->xAxis_ << " ," << currentPosition->yAxis_ << " ) \n";
+		os << "hello i am the king. i am currently at position (" << currentPosition->xAxis_ << " ," << currentPosition->yAxis_ << " ) \n";
 	}
+
+private:
+
 };
 
 class Queen : public Piece
