@@ -57,17 +57,65 @@ int main(int argc, char *argv[])
 	//return app.exec();
 
 	Board board; 
-	cout << "let's access the square at position (0,4) tbh" << endl;
-	King king(board, 'W');
-	cout << king;
-	cout << *board.squares[0][4]->currentPiece;
 
-	king.setPosition(board.squares[1][4]);
-	cout << king;
-	king.setPosition(board.squares[0][3]);
-	cout << king;
-	king.setPosition(board.squares[7][3]);
-	cout << king;
-	king.setPosition(board.squares[7][7]);
-	cout << king;
+	King k(board, 'W');
+	King K(board, 'B');
+
+	Queen q(board, 'W');
+	Queen Q(board, 'B');
+
+	Bishop b1(board, 'W', 2);
+	Bishop b2(board, 'W', 5);
+
+	Bishop B1(board, 'B', 2);
+	Bishop B2(board, 'B', 5);
+
+	Knight n1(board, 'W', 1);
+	Knight n2(board, 'W', 6);
+
+	Knight N1(board, 'B', 1);
+	Knight N2(board, 'B', 6);
+
+	Rook r1(board, 'W', 0);
+	Rook r2(board, 'W', 7);
+
+	Rook R1(board, 'B', 0);
+	Rook R2(board, 'B', 7);
+
+	Pawn p1(board, 'W', 0);
+	Pawn p2(board, 'W', 1);
+	Pawn p3(board, 'W', 2);
+	Pawn p4(board, 'W', 3);
+	Pawn p5(board, 'W', 4);
+	Pawn p6(board, 'W', 5);
+	Pawn p7(board, 'W', 6);
+	Pawn p8(board, 'W', 7);
+
+	Pawn P1(board, 'B', 0);
+	Pawn P2(board, 'B', 1);
+	Pawn P3(board, 'B', 2);
+	Pawn P4(board, 'B', 3);
+	Pawn P5(board, 'B', 4);
+	Pawn P6(board, 'B', 5);
+	Pawn P7(board, 'B', 6);
+	Pawn P8(board, 'B', 7);
+
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (board.squares[i][j]->currentPiece != nullptr)
+			{
+				cout << *(board.squares[i][j]->currentPiece);
+			}
+		}
+	}
+
+	//queen.setPosition(board.squares[0][7]);
+	//cout << queen;
+	//queen.setPosition(board.squares[0][3]);
+	//cout << queen;
+	//queen.setPosition(board.squares[7][7]);
+	//cout << queen;
 }
