@@ -111,11 +111,4 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-
-	//queen.setPosition(board.squares[0][7]);
-	//cout << queen;
-	//queen.setPosition(board.squares[0][3]);
-	//cout << queen;
-	//queen.setPosition(board.squares[7][7]);
-	//cout << queen;
 }

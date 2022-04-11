@@ -5,7 +5,7 @@
 #include "Chess.hpp"
 using namespace std;
 
-class King : virtual public Piece
+class King :  public Piece
 {
 public:
 	King(Board& board, char color) :Piece(board, color)
@@ -72,7 +72,7 @@ private:
 
 };
 
-class Queen : virtual public Piece
+class Queen :  public Piece
 {
 public:
 	Queen(Board& board, char color) :Piece(board, color)
@@ -247,7 +247,7 @@ public:
 private:
 };
 
-class Bishop : virtual public Piece
+class Bishop :  public Piece
 {
 public:
 	Bishop(Board& board, char color, int n) :Piece(board, color)
@@ -360,10 +360,10 @@ public:
 private:
 };
 
-class Knight : virtual public Piece
+class Rook :  public Piece
 {
 public:
-	Knight(Board& board, char color, int n) :Piece(board, color)
+	Rook(Board& board, char color, int n) :Piece(board, color)
 	{
 		initializePosition(n);
 	};
@@ -383,7 +383,7 @@ public:
 	};
 	void assignToSquare(int X, int Y)
 	{
-		board_.squares[X][Y]->currentPiece = make_shared<Knight>(*this);
+		board_.squares[X][Y]->currentPiece = make_shared<Rook>(*this);
 	}
 
 	bool isValidMove(shared_ptr<Square> newPosition) override
@@ -469,10 +469,10 @@ public:
 private:
 };
 
-class Rook : virtual public Piece
+class Knight :  public Piece
 {
 public:
-	Rook(Board& board, char color, int n) :Piece(board, color)
+	Knight(Board& board, char color, int n) :Piece(board, color)
 	{
 		initializePosition(n);
 	};
@@ -492,7 +492,7 @@ public:
 	};
 	void assignToSquare(int X, int Y)
 	{
-		board_.squares[X][Y]->currentPiece = make_shared<Rook>(*this);
+		board_.squares[X][Y]->currentPiece = make_shared<Knight>(*this);
 	}
 
 	bool isValidMove(shared_ptr<Square> newPosition) override
@@ -525,7 +525,7 @@ public:
 private:
 };
 
-class Pawn : virtual public Piece
+class Pawn :  public Piece
 {
 public:
 	Pawn(Board& board, char color, int n) :Piece(board, color)

@@ -91,7 +91,7 @@ public:
 	}
 	//enum Direction{HORIZONTAL, VERTICAL, DIAGONAL};
 	virtual void initializePosition(int n = 0) { currentPosition = make_shared<Square>(n, n); };
-	virtual void setPosition(shared_ptr<Square> newPosition)
+	void setPosition(shared_ptr<Square> newPosition)
 	{
 		updatePossiblePositions();
 		if (isValidMove(newPosition))
@@ -116,7 +116,7 @@ public:
 	virtual void assignToSquare(int X, int Y) {};
 	virtual void updatePossiblePositions() {};
 	virtual bool isValidMove(shared_ptr<Square> position) { return false; };
-	virtual bool checkPositionOverlap(shared_ptr<Square> possiblePosition)
+	bool checkPositionOverlap(shared_ptr<Square> possiblePosition)
 	{
 		//for (int i = 0; i < possiblePositions.size(); i++)
 		if (board_.squares[possiblePosition->row_][possiblePosition->column_]->currentPiece != nullptr)
