@@ -20,6 +20,9 @@
     <Filter Include="Sources Bibliotheques">
       <UniqueIdentifier>{68ace6f3-7624-4063-b7e8-0b2c755fbfc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vue">
+      <UniqueIdentifier>{0a382036-6e2a-4256-a5b0-ed3df5f63f3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -34,32 +37,14 @@
     <ClCompile Include="googletest\src\gtest-all.cc">
       <Filter>Sources Bibliotheques</Filter>
     </ClCompile>
-    <ClCompile Include="CalcWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Calc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestCalc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Calc.hpp">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="CalcWindow.hpp">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Piece.hpp">
-      <Filter>Header Files</Filter>
-    </QtMoc>
+    <QtUic Include="View.ui">
+      <Filter>Vue</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

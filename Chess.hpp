@@ -18,7 +18,87 @@ using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de l
 
 class Board; 
 class Square;
+class Player;
 class Piece;
+
+class Square //:public QObject
+{
+	//Q_OBJECT
+public:
+	Square() :row_(0), column_(0) {};
+	Square(int x, int y) : row_(x), column_(y) {};
+	int row_ = 0;
+	int column_ = 0;
+	int maxCoordinates_ = 7;
+	shared_ptr<Piece> currentPiece = nullptr;
+private:
+
+};
+
+class Piece //: public QObject
+{
+	//Q_OBJECT
+public:
+	//Piece() = default;
+	virtual ~Piece() = default;
+
+	Piece(Square& square, char color) :color_(color)
+	{
+	}
+	//enum Direction{HORIZONTAL, VERTICAL, DIAGONAL};
+	//virtual void initializePosition(int n = 0) { currentPosition = make_shared<Square>(n, n); };
+
+	virtual void assignToSquare(Square& square) {};
+	virtual void updatePossiblePositions(Square& position) {};
+	bool validateMove(Square& position)
+	{
+		bool valid = false;
+		for (auto& possiblePosition : possiblePositions)
+		{
+			if ((position.row_ == possiblePosition->row_) &&
+				(position.column_ == possiblePosition->column_))
+			{
+				valid = true;
+				cout << "move is among the piece's possible positions" << endl;
+			}
+		}
+		return valid;
+	};
+	virtual void talk(ostream& os) const { os << "plain piece"; };
+	char color_ = 'W';
+	void addPossiblePosition(int newX, int newY)
+	{
+		if ((newX <= 7) &&
+			(newY <= 7) &&
+			(newX >= 0) &&
+			(newY >= 0))
+		{
+			possiblePositions.push_back(make_shared<Square>(newX, newY));
+		}
+	}
+	list<shared_ptr<Square>> possiblePositions;
+	bool isDead = false;
+private:
+};
+
+
+ostream& operator<< (ostream& os, const Piece& piece)
+{
+	piece.talk(os);
+	return os;
+}
+
+ostream& operator<< (ostream& os, const Square& square)
+{
+	os << "square at position (" << square.row_ << "," << square.column_ << ")";
+
+	if (square.currentPiece != nullptr)
+	{
+		os << " with " << *square.currentPiece;
+	}
+	os << "\n";
+	return os;
+}
 
 class Board //: public QObject
 {
@@ -31,128 +111,184 @@ public:
 		size = 8;
 		max = size - 1;
 		populate();
-		//squares = make_unique< shared_ptr<Square>>[size][size] = 0;
 	};
-	shared_ptr<Square> squares[8][8];
-	vector<shared_ptr<Piece>> graveyard;
+	Square squares[8][8];
+	list<Piece> pieces;
 	void populate()
 	{
 		for (int i = 0; i < 8; i++)
 		{
 			for (int k = 0; k < 8; k++)
 			{
-				//squares[i][k] = make_shared<Square>(i, k);
-
-				//shared_ptr<Square> newSquare = make_shared<Square>(i, k);
-				squares[i][k] = make_shared<Square>(i, k);
+				squares[i][k] = Square(i, k);
 			}
 		}
 	}
-	/*vector<shared_ptr<Square>> operator[](int x)
+	bool checkPositionOverlap(Square& currentPosition, Square& newPosition)
 	{
-		vector<shared_ptr<Square>>::const_iterator first = vectorSquares.cbegin() + (x * size);
-		vector<shared_ptr<Square>>::const_iterator last = vectorSquares.cbegin() + x * size + size;
-		vector<shared_ptr<Square>> subSquares(first, last);
-		return subSquares;
-	}*/
-private:
-
-};
-
-class Square //:public QObject
-{
-	//Q_OBJECT
-public:
-	Square(int x, int y) : row_(x), column_(y) {};
-	//void populateBoard(Board& board) { maxCoordinates_ = board.size - 1; };
-	//Piece* currentPiece;
-	//friend ostream& operator<< (ostream& os, const Square& square);
-	int row_ = 0;
-	int column_ = 0;
-	int maxCoordinates_ = 7;
-	shared_ptr<Piece> currentPiece = nullptr;
-private:
-
-};
-ostream& operator<< (ostream& os, const Square& square)
-{
-	os << "i am a square at position ( " << square.row_ << ", " << square.column_ << " ) \n";
-	return os;
-}
-
-class Piece //: public QObject
-{
-	//Q_OBJECT
-public:
-	//Piece() = default;
-	Piece(Board& board, char color) :board_(board), color_(color)
-	{
-		initializePosition();
-	}
-	//enum Direction{HORIZONTAL, VERTICAL, DIAGONAL};
-	virtual void initializePosition(int n = 0) { currentPosition = make_shared<Square>(n, n); };
-	void setPosition(shared_ptr<Square> newPosition)
-	{
-		updatePossiblePositions();
-		if (isValidMove(newPosition))
+		if (newPosition.currentPiece != nullptr)
 		{
-			board_.squares[currentPosition->row_][currentPosition->column_]->currentPiece = nullptr;
-			currentPosition = newPosition;
-
-			if (board_.squares[newPosition->row_][newPosition->column_]->currentPiece != nullptr)
+			if (newPosition.currentPiece->color_ == currentPosition.currentPiece->color_)
 			{
-				//board_.graveyard.push_front(board_.squares[newPosition->row_][newPosition->column_]->currentPiece);
-				//cout << *board_.graveyard.end();
-				cout << "i'm dead now" << endl;
-			}
-			assignToSquare(newPosition->row_, newPosition->column_);
-			cout << "switchin them positions for you <3" << endl;
-		}
-		else
-		{
-			cout << "invalid move sus try again" << endl;
-		}
-	};
-	virtual void assignToSquare(int X, int Y) {};
-	virtual void updatePossiblePositions() {};
-	virtual bool isValidMove(shared_ptr<Square> position) { return false; };
-	bool checkPositionOverlap(shared_ptr<Square> possiblePosition)
-	{
-		//for (int i = 0; i < possiblePositions.size(); i++)
-		if (board_.squares[possiblePosition->row_][possiblePosition->column_]->currentPiece != nullptr)
-		{
-			if (board_.squares[possiblePosition->row_][possiblePosition->column_]->currentPiece->color_ == color_)
-			{
-				if ((possiblePosition->row_ != currentPosition->row_) || (possiblePosition->column_ != currentPosition->column_))
+				if ((newPosition.row_ != currentPosition.row_) || (newPosition.column_ != currentPosition.column_))
 				{
-					//TODO: simplify this logic maybe idk it's a little dumb
-					//cout << "wait you can't kill someone on your own team are you crazy" << endl;
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	virtual void talk(ostream& os) const { os << "just a plain piece tbh"; };
-	char color_ = 'W';
-	void addPossiblePosition(int newX, int newY)
+	void setPosition(Square& currentPosition, Square& newPosition)
 	{
-		if ((newX <= board_.max) &&
-			(newY <= board_.max) &&
-			(newX >= 0) &&
-			(newY >= 0))
+		if (isValidMove(currentPosition, newPosition))
 		{
-			possiblePositions.push_back(board_.squares[newX][newY]);
+			if (newPosition.currentPiece != nullptr)
+			{
+				newPosition.currentPiece->isDead = true;
+				cout << *newPosition.currentPiece << " is dead" << endl;
+				newPosition.currentPiece = nullptr;
+			}
+			currentPosition.currentPiece->assignToSquare(newPosition);
+			currentPosition.currentPiece = nullptr;
+			cout << "positions changed" << endl;
 		}
+		else
+		{
+			cout << "invalid move" << endl;
+		}
+	};
+	/*void capturePiece(Square& position)
+	{
+		position.currentPiece->isDead = true;
+		position.currentPiece = nullptr;
+	}*/
+	bool isValidMove(Square& currentPosition, Square& newPosition)
+	{
+		currentPosition.currentPiece->updatePossiblePositions(currentPosition);
+		currentPosition.currentPiece->possiblePositions.remove_if([this, &currentPosition](auto& pos)
+			{ return checkPositionOverlap(currentPosition,*pos); });
+		cout << "possible positions:" << endl;
+		for (auto&& position : currentPosition.currentPiece->possiblePositions)
+		{
+			cout << *position;
+		}
+		//TODO: verifier si parcours entre currentPosition et newPosition est libre
+		return currentPosition.currentPiece->validateMove(newPosition);
 	}
-protected:
-	Board& board_;
-	shared_ptr<Square> currentPosition;
-	list<shared_ptr<Square>> possiblePositions;
+private:
+
+};
+class King : public Piece
+{
+public:
+	King(Square& square, char color) : Piece(square, color)
+	{
+		assignToSquare(square);
+	};
+
+	void assignToSquare(Square& square)
+	{
+		square.currentPiece = make_shared<King>(*this);
+	}
+
+	void updatePossiblePositions(Square& currentPosition) override
+	{
+		addPossiblePosition(currentPosition.row_, currentPosition.column_);
+		addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_);
+		addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_);
+		addPossiblePosition(currentPosition.row_, currentPosition.column_ + 1);
+		addPossiblePosition(currentPosition.row_, currentPosition.column_ - 1);
+		addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ + 1);
+		addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ - 1);
+		addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ - 1);
+		addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ + 1);
+	};
+	void talk(ostream& os) const override
+	{
+		os << "king (" << color_ << ")";
+	}
+
+private:
+
+};
+class Rook : public Piece
+{
+public:
+	Rook(Square& square, char color) :Piece(square, color)
+	{
+		assignToSquare(square);
+	};
+	
+	void assignToSquare(Square& square)
+	{
+		square.currentPiece = make_shared<Rook>(*this);
+	}
+	void updatePossiblePositions(Square& currentPosition) override
+	{
+		for (int i = 1; i < 7; i++)
+		{
+			addPossiblePosition(currentPosition.row_, currentPosition.column_ + i);
+			addPossiblePosition(currentPosition.row_, currentPosition.column_ - i);
+			addPossiblePosition(currentPosition.row_ + i, currentPosition.column_);
+			addPossiblePosition(currentPosition.row_ - i, currentPosition.column_);
+		}
+	};
+	void talk(ostream& os) const override
+	{
+		os << "rook  (" << color_ << ")";
+	}
+
+private:
+};
+class Knight : public Piece
+{
+public:
+	Knight(Square& square, char color) :Piece(square, color)
+	{
+		assignToSquare(square);
+	};
+
+	void assignToSquare(Square& square)
+	{
+		square.currentPiece = make_shared<Knight>(*this);
+	}
+
+	void updatePossiblePositions(Square& currentPosition) override
+	{
+		addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ + 2);
+		addPossiblePosition(currentPosition.row_ + 2, currentPosition.column_ + 1);
+		addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ - 2);
+		addPossiblePosition(currentPosition.row_ - 2, currentPosition.column_ - 1);
+
+		addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ - 2);
+		addPossiblePosition(currentPosition.row_ + 2, currentPosition.column_ - 1);
+		addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ + 2);
+		addPossiblePosition(currentPosition.row_ - 2, currentPosition.column_ + 1);
+	};
+	void talk(ostream& os) const override
+	{
+		os << "knight (" << color_ << ")";
+	}
+
+private:
 };
 
-ostream& operator<< (ostream& os, const Piece& piece)
+class Player
 {
-	piece.talk(os);
-	return os;
-}
+public:
+	Player(Board& board, char color) :color_(color) { board_ = make_shared<Board>(board); };
+	char color_;
+	shared_ptr<Board> board_;
+	void makeMove(Square& currentPosition, Square& newPosition)
+	{
+		if (currentPosition.currentPiece->color_ == color_)
+		{
+			board_->setPosition(currentPosition, newPosition);
+		}
+		else
+		{
+			cout << "wrong color" << endl;
+		}
+	}
+private:
+};

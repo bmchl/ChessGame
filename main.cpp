@@ -1,5 +1,6 @@
 ﻿#include "Chess.hpp"
-#include "Piece.hpp"
+//#include "Piece.hpp"
+//#include "Player.hpp"
 //#include "CalcWindow.hpp"
 
 //#include <QApplication>
@@ -55,60 +56,79 @@ int main(int argc, char *argv[])
 	//CalcWindow calcWindow;
 	//calcWindow.show();
 	//return app.exec();
-
 	Board board; 
 
-	King k(board, 'W');
-	King K(board, 'B');
+	King k(board.squares[0][4], 'W');
+	King K(board.squares[0][3], 'B');
 
-	Queen q(board, 'W');
-	Queen Q(board, 'B');
+	Rook r(board.squares[4][6], 'W');
+	Knight N(board.squares[3][5], 'B');
 
-	Bishop b1(board, 'W', 2);
-	Bishop b2(board, 'W', 5);
+	Player p1(board, 'W');
+	Player p2(board, 'B');
 
-	Bishop B1(board, 'B', 2);
-	Bishop B2(board, 'B', 5);
+	bool gameOver = false;
+	char turn = 'B';
 
-	Knight n1(board, 'W', 1);
-	Knight n2(board, 'W', 6);
+	int currentRow = 0;
+	int currentColumn = 0;
+	int newRow = 0;
+	int newColumn = 0;
 
-	Knight N1(board, 'B', 1);
-	Knight N2(board, 'B', 6);
-
-	Rook r1(board, 'W', 0);
-	Rook r2(board, 'W', 7);
-
-	Rook R1(board, 'B', 0);
-	Rook R2(board, 'B', 7);
-
-	Pawn p1(board, 'W', 0);
-	Pawn p2(board, 'W', 1);
-	Pawn p3(board, 'W', 2);
-	Pawn p4(board, 'W', 3);
-	Pawn p5(board, 'W', 4);
-	Pawn p6(board, 'W', 5);
-	Pawn p7(board, 'W', 6);
-	Pawn p8(board, 'W', 7);
-
-	Pawn P1(board, 'B', 0);
-	Pawn P2(board, 'B', 1);
-	Pawn P3(board, 'B', 2);
-	Pawn P4(board, 'B', 3);
-	Pawn P5(board, 'B', 4);
-	Pawn P6(board, 'B', 5);
-	Pawn P7(board, 'B', 6);
-	Pawn P8(board, 'B', 7);
-
-
+	cout << "game start" << endl;
+	cout << "here are the current pieces on the board:" << endl;
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			if (board.squares[i][j]->currentPiece != nullptr)
+			if (board.squares[i][j].currentPiece != nullptr)
 			{
-				cout << *(board.squares[i][j]->currentPiece);
+				cout << board.squares[i][j];
 			}
 		}
 	}
+	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE DÉROULEMENT D'UN JEU
+	while (!gameOver)
+	{
+		if ((k.isDead) || (K.isDead))
+		{
+			gameOver = true;
+			break;
+		}
+		if (turn == 'W') { turn = 'B'; }
+		else if (turn == 'B') { turn = 'W'; }
+		cout << "current turn: " << turn << endl;
+		if (turn == 'W') 
+		{ 
+			cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
+			cin >> currentRow;
+			cin >> currentColumn;
+			cout << "player 1: pick a destination location\n";
+			cin >> newRow;
+			cin >> newColumn;
+			p1.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
+		}
+		else if (turn == 'B')
+		{
+			cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
+			cin >> currentRow;
+			cin >> currentColumn;
+			cout << "player 2: pick a destination location\n";
+			cin >> newRow;
+			cin >> newColumn;
+			p2.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
+		}
+	}
+	cout << "game over";
+
+	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE FONCTIONNEMENT SANS PASSER PAR LES INPUTS
+	//p2.makeMove(board.squares[0][3], board.squares[0][4]);
+	//p1.makeMove(board.squares[0][4], board.squares[0][5]);
+	//p1.makeMove(board.squares[4][6], board.squares[0][6]);
+	//p2.makeMove(board.squares[3][5], board.squares[1][6]);
+	//p2.makeMove(board.squares[1][6], board.squares[2][4]);
+	//p1.makeMove(board.squares[0][4], board.squares[0][6]);
+
+	return 0;
 }
+   
