@@ -1,4 +1,7 @@
-﻿#include "Chess.hpp"
+﻿//Projet final INF1015
+//Michael Banna (2147128) & Nour Zahreddine (2167661)
+
+#include "Chess.hpp"
 //#include "Piece.hpp"
 //#include "Player.hpp"
 //#include "CalcWindow.hpp"
