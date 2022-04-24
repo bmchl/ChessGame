@@ -60,69 +60,85 @@ int main(int argc, char *argv[])
 	//calcWindow.show();
 	//return app.exec();
 	Board board; 
+	//King::instanceCount = 0;
+	//auto k = King::getInstance(board.squares[0][4], 'W');
 
 	King k(board.squares[0][4], 'W');
+	cout << board.squares[0][4];
 	King K(board.squares[0][3], 'B');
+	cout << board.squares[0][3];
+	//King K3(board.squares[0][5], 'B');
+	//cout << board.squares[0][5];
+
+	cout << "performing temporary move on (0,3)" << endl;
+	TemporaryMove* kingMove = new TemporaryMove(board, board.squares[0][3], board.squares[1][3]);
+	cout << board.squares[0][3];
+	cout << board.squares[1][3];
+	cout << "deleting temporary move instance" << endl;
+	delete kingMove;
+	cout << board.squares[0][3];
+	cout << board.squares[1][3];
+
 
 	Rook r(board.squares[4][6], 'W');
 	Knight N(board.squares[3][5], 'B');
 
-	Player p1(board, 'W');
-	Player p2(board, 'B');
+	//Player p1(board, 'W');
+	//Player p2(board, 'B');
 
-	bool gameOver = false;
-	char turn = 'B';
+	//bool gameOver = false;
+	//char turn = 'B';
 
-	int currentRow = 0;
-	int currentColumn = 0;
-	int newRow = 0;
-	int newColumn = 0;
+	//int currentRow = 0;
+	//int currentColumn = 0;
+	//int newRow = 0;
+	//int newColumn = 0;
 
-	cout << "game start" << endl;
-	cout << "here are the current pieces on the board:" << endl;
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			if (board.squares[i][j].currentPiece != nullptr)
-			{
-				cout << board.squares[i][j];
-			}
-		}
-	}
+	//cout << "game start" << endl;
+	//cout << "here are the current pieces on the board:" << endl;
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	for (int j = 0; j < 8; j++)
+	//	{
+	//		if (board.squares[i][j].currentPiece != nullptr)
+	//		{
+	//			cout << board.squares[i][j];
+	//		}
+	//	}
+	//}
 	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE DÉROULEMENT D'UN JEU
-	while (!gameOver)
-	{
-		if ((k.isDead) || (K.isDead))
-		{
-			gameOver = true;
-			break;
-		}
-		if (turn == 'W') { turn = 'B'; }
-		else if (turn == 'B') { turn = 'W'; }
-		cout << "current turn: " << turn << endl;
-		if (turn == 'W') 
-		{ 
-			cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
-			cin >> currentRow;
-			cin >> currentColumn;
-			cout << "player 1: pick a destination location\n";
-			cin >> newRow;
-			cin >> newColumn;
-			p1.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
-		}
-		else if (turn == 'B')
-		{
-			cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
-			cin >> currentRow;
-			cin >> currentColumn;
-			cout << "player 2: pick a destination location\n";
-			cin >> newRow;
-			cin >> newColumn;
-			p2.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
-		}
-	}
-	cout << "game over";
+	//while (!gameOver)
+	//{
+	//	if ((k.isDead) || (K.isDead))
+	//	{
+	//		gameOver = true;
+	//		break;
+	//	}
+	//	if (turn == 'W') { turn = 'B'; }
+	//	else if (turn == 'B') { turn = 'W'; }
+	//	cout << "current turn: " << turn << endl;
+	//	if (turn == 'W') 
+	//	{ 
+	//		cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
+	//		cin >> currentRow;
+	//		cin >> currentColumn;
+	//		cout << "player 1: pick a destination location\n";
+	//		cin >> newRow;
+	//		cin >> newColumn;
+	//		p1.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
+	//	}
+	//	else if (turn == 'B')
+	//	{
+	//		cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
+	//		cin >> currentRow;
+	//		cin >> currentColumn;
+	//		cout << "player 2: pick a destination location\n";
+	//		cin >> newRow;
+	//		cin >> newColumn;
+	//		p2.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
+	//	}
+	//}
+	//cout << "game over";
 
 	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE FONCTIONNEMENT SANS PASSER PAR LES INPUTS
 	//p2.makeMove(board.squares[0][3], board.squares[0][4]);

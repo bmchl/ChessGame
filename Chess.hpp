@@ -5,10 +5,10 @@
 #include <functional>
 #include <cassert>
 #include <iterator>
-#include "gsl/span"
+//#include "gsl/span"
 #include <vector>
 #include <list>
-using gsl::span;
+//using gsl::span;
 using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de le permettre dans l'énoncé.
 
 
@@ -16,10 +16,13 @@ using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de l
 ////#include <QObject>
 //#pragma pop()
 
-class Board; 
-class Square;
-class Player;
-class Piece;
+	class Board;
+	class Square;
+	class Player;
+	class Piece; 
+	class King;
+	class Knight;
+	class Rook;
 
 class Square //:public QObject
 {
@@ -178,13 +181,40 @@ public:
 private:
 
 };
+
+class KingInstanceException : public logic_error
+{
+public:
+	using logic_error::logic_error;
+	
+};
 class King : public Piece
 {
 public:
 	King(Square& square, char color) : Piece(square, color)
 	{
-		assignToSquare(square);
+		try
+		{
+			if (instanceCount_ == 2)
+			{
+				throw KingInstanceException("max instances reached\n");
+			}
+			else
+			{
+				assignToSquare(square);
+				instanceCount_++;
+			}
+		}
+		catch (KingInstanceException& e)//mettre dans une autre classe qui controle la vue = interface 
+		{
+			cout << e.what();
+		}
 	};
+	~King()
+	{
+		instanceCount_--;
+	};
+	static int getCount() { return instanceCount_; }
 
 	void assignToSquare(Square& square)
 	{
@@ -209,7 +239,7 @@ public:
 	}
 
 private:
-
+	inline static int instanceCount_ = 0;
 };
 class Rook : public Piece
 {
@@ -291,4 +321,23 @@ public:
 		}
 	}
 private:
+};
+class TemporaryMove
+{
+public:
+	TemporaryMove(Board& board, Square& startingPosition, Square& newPosition) :board_(board), start_(startingPosition), end_(newPosition)
+	{
+		board_.setPosition(start_, end_);
+	};
+	~TemporaryMove()
+	{
+		end_.currentPiece->isDead = true;
+		end_.currentPiece = nullptr;
+
+		//board_.setPosition(end_, start_);
+	};
+private:
+	Board& board_;
+	Square& start_;
+	Square& end_;
 };
