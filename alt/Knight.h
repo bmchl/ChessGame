@@ -15,9 +15,9 @@
 class Knight : public Piece
 {
 public:
-	Knight(Square& square, char color);
-	void assignToSquare(Square& square);
-	void updatePossiblePositions(Square& currentPosition) override;
+	Knight(Square*& square, char color);
+	void assignToSquare(Square*& square);
+	void updatePossiblePositions(Square*& currentPosition) override;
 	void talk(std::ostream& os) const override;
 
 private:

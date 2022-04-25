@@ -16,13 +16,13 @@ using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de l
 ////#include <QObject>
 //#pragma pop()
 
-	class Board;
-	class Square;
-	class Player;
-	class Piece; 
-	class King;
-	class Knight;
-	class Rook;
+class Board;
+class Square;
+class Player;
+class Piece; 
+class King;
+class Knight;
+class Rook;
 
 class Square //:public QObject
 {
@@ -42,15 +42,12 @@ class Piece //: public QObject
 {
 	//Q_OBJECT
 public:
-	//Piece() = default;
+	Piece() = default;
 	virtual ~Piece() = default;
 
-	Piece(Square& square, char color) :color_(color)
+	Piece(Square& square, char color) : color_(color)
 	{
 	}
-	//enum Direction{HORIZONTAL, VERTICAL, DIAGONAL};
-	//virtual void initializePosition(int n = 0) { currentPosition = make_shared<Square>(n, n); };
-
 	virtual void assignToSquare(Square& square) {};
 	virtual void updatePossiblePositions(Square& position) {};
 	bool validateMove(Square& position)
@@ -182,6 +179,7 @@ private:
 
 };
 
+
 class KingInstanceException : public logic_error
 {
 public:
@@ -193,22 +191,12 @@ class King : public Piece
 public:
 	King(Square& square, char color) : Piece(square, color)
 	{
-		try
+		if (instanceCount_ >= 2)
 		{
-			if (instanceCount_ == 2)
-			{
-				throw KingInstanceException("max instances reached\n");
-			}
-			else
-			{
-				assignToSquare(square);
-				instanceCount_++;
-			}
+			throw KingInstanceException("max instances reached\n");
 		}
-		catch (KingInstanceException& e)//mettre dans une autre classe qui controle la vue = interface 
-		{
-			cout << e.what();
-		}
+		assignToSquare(square);
+		instanceCount_++;
 	};
 	~King()
 	{
@@ -241,6 +229,7 @@ public:
 private:
 	inline static int instanceCount_ = 0;
 };
+
 class Rook : public Piece
 {
 public:
@@ -270,10 +259,11 @@ public:
 
 private:
 };
+
 class Knight : public Piece
 {
 public:
-	Knight(Square& square, char color) :Piece(square, color)
+	Knight(Square& square, char color) : Piece(square, color)
 	{
 		assignToSquare(square);
 	};
@@ -322,22 +312,24 @@ public:
 	}
 private:
 };
-class TemporaryMove
+
+class TemporaryPiece
 {
 public:
-	TemporaryMove(Board& board, Square& startingPosition, Square& newPosition) :board_(board), start_(startingPosition), end_(newPosition)
+	TemporaryPiece(Piece& piece, Square& position) : piece_(piece), position_(position)
 	{
-		board_.setPosition(start_, end_);
+		//piece_.assignToSquare(position_);
 	};
-	~TemporaryMove()
+	~TemporaryPiece()
 	{
-		end_.currentPiece->isDead = true;
-		end_.currentPiece = nullptr;
+		piece_.isDead = true;
+		position_.currentPiece = nullptr;
+		//piece_.~Piece();
+	};
+	Piece get() { return piece_; };
+	operator Piece() { return get(); };
 
-		//board_.setPosition(end_, start_);
-	};
 private:
-	Board& board_;
-	Square& start_;
-	Square& end_;
+	Piece& piece_;
+	Square& position_;
 };

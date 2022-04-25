@@ -65,20 +65,38 @@ int main(int argc, char *argv[])
 
 	King k(board.squares[0][4], 'W');
 	cout << board.squares[0][4];
+	cout << k.getCount() << endl;
 	King K(board.squares[0][3], 'B');
 	cout << board.squares[0][3];
-	//King K3(board.squares[0][5], 'B');
-	//cout << board.squares[0][5];
+	cout << k.getCount() << endl;
 
 	cout << "performing temporary move on (0,3)" << endl;
-	TemporaryMove* kingMove = new TemporaryMove(board, board.squares[0][3], board.squares[1][3]);
+	TemporaryPiece* tempKing = new TemporaryPiece(K, board.squares[0][3]);
+	cout << k.getCount() << endl;
 	cout << board.squares[0][3];
 	cout << board.squares[1][3];
-	cout << "deleting temporary move instance" << endl;
-	delete kingMove;
+	cout << "deleting temporary piece instance" << endl;
+	delete tempKing;
+	cout << k.getCount() << endl;
 	cout << board.squares[0][3];
+	cout << board.squares[1][3];
+	
+	cout << "new king instance is now" << endl;
+	King k3(board.squares[1][3], 'W');
+	cout << k.getCount() << endl;
 	cout << board.squares[1][3];
 
+	try 
+	{
+		King K4(board.squares[0][5], 'B');
+		cout << board.squares[0][5];
+	}
+	catch (KingInstanceException& e)
+	{
+		cout << e.what();
+	}
+	cout << board.squares[0][5];
+	cout << k.getCount() << endl;
 
 	Rook r(board.squares[4][6], 'W');
 	Knight N(board.squares[3][5], 'B');

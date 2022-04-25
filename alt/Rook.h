@@ -16,8 +16,8 @@
 class Rook : public Piece
 {
 public:
-	Rook(Square& square, char color);
-	void assignToSquare(Square& square);
+	Rook(unique_ptr<Square>& square, char color);
+	void assignToSquare(unique_ptr<Square>& square);
 	void updatePossiblePositions(Square& currentPosition) override;
 	void talk(std::ostream& os) const override;
 private:

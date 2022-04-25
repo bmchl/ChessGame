@@ -40,7 +40,7 @@ void Board::setPosition(Square& currentPosition, Square& newPosition)
 		if (newPosition.currentPiece != nullptr)
 		{
 			newPosition.currentPiece->isDead = true;
-			cout << *newPosition.currentPiece << " is dead" << endl;
+			cout << *newPosition->currentPiece << " is dead" << endl;
 			newPosition.currentPiece = nullptr;
 		}
 			currentPosition.currentPiece->assignToSquare(newPosition);

@@ -11,13 +11,24 @@
 #include "Square.h"
 #include "Board.h"
 
-class TemporaryPiece: public Piece
+#ifndef TEMPORARYPIECE_H
+#define TEMPORARYPIECE_H
+class TemporaryPiece
 {
 public:
-	TemporaryPiece(Piece& piece, Square& position);
-	~TemporaryPiece();
-	
+	TemporaryPiece(Piece& piece, unique_ptr<Square>& position) : piece_(piece), position_(position)
+	{
+		piece_.assignToSquare(position_);
+	};
+	~TemporaryPiece()
+	{
+		piece_.isDead = true;
+		position_->currentPiece = nullptr;
+	};
+	Piece get() { return piece_; };
+	operator Piece() { return get(); };
 private:
 	Piece& piece_;
-	Square& position_;
+	unique_ptr<Square>& position_;
 };
+#endif

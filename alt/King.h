@@ -10,6 +10,8 @@
 #include "Square.h"
 #include "Piece.h"
 
+#ifndef KING_H
+#define KING_H
 
 class KingInstanceException : public std::logic_error
 {
@@ -20,19 +22,21 @@ public:
 class King : public Piece
 {
 public:
-	King(Square& square, char color);
+	King(Square*& square, char color);
 	~King()
 	{
 		instanceCount_--;
 	};
 	static int getCount() { return instanceCount_; }
 
-	void assignToSquare(Square& square);
+	void assignToSquare(Square*& square);
 
-	void updatePossiblePositions(Square& currentPosition) override;
+	void updatePossiblePositions(Square*& currentPosition) override;
 	void talk(std::ostream& os) const override;
 	
 
 private:
 	inline static int instanceCount_ = 0;
 };
+
+#endif

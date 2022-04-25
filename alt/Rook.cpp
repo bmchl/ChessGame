@@ -2,14 +2,14 @@
 
 using namespace std;
 
-Rook::Rook(Square& square, char color) : Piece(square, color)
+Rook::Rook(unique_ptr<Square>& square, char color) : Piece(square, color)
 {
 	assignToSquare(square);
 };
 
-void Rook::assignToSquare(Square& square)
+void Rook::assignToSquare(unique_ptr<Square>& square)
 {
-	square.currentPiece = make_shared<Rook>(*this);
+	square->currentPiece = make_shared<Rook>(*this);
 }
 void Rook::updatePossiblePositions(Square& currentPosition) 
 {

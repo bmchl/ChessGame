@@ -2,12 +2,12 @@
 using namespace std;
 
 
-bool Piece::validateMove(Square& position)
+bool Piece::validateMove(Square*& position)
 {
 	bool valid = false;
 	for (auto& possiblePosition : possiblePositions)
 	{
-		if ((position.row_ == possiblePosition->row_) && (position.column_ == possiblePosition->column_))
+		if ((position->row_ == possiblePosition->row_) && (position->column_ == possiblePosition->column_))
 		{
 		valid = true;
 		cout << "move is among the piece's possible positions" << endl;
@@ -25,7 +25,7 @@ void Piece::addPossiblePosition(int newX, int newY)
 		(newX >= 0) &&
 		(newY >= 0))
 		{
-			possiblePositions.push_back(make_shared<Square>(newX, newY));
+			possiblePositions.push_back(new Square(newX, newY));
 		}
 }
 

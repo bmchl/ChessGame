@@ -18,8 +18,8 @@ public:
 	int size = 8;
 	int max = 0;
 	Board();
-	unique_ptr<Square> squares[8][8];
-	std::list<unique_ptr<Piece>> pieces;
+	std::unique_ptr<Square> squares[8][8];
+	std::list<std::unique_ptr<Piece>> pieces;
 	void populate();
 	bool checkPositionOverlap(Square& currentPosition, Square& newPosition);
 	void setPosition(Square& currentPosition, Square& newPosition);

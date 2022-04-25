@@ -8,7 +8,6 @@
 #include <vector>
 #include <list>
 
-
 #include "Board.h"
 #include "Square.h"
 #include "Piece.h"
@@ -22,10 +21,13 @@
 
 class Game
 {
+public:
+	Game();
+	void initializePieces();
+	void play();
 private:
 	Board board_ = Board();
 	Player p1_ = Player(board_, 'W');
 	Player p2_ = Player(board_, 'B');
 }
-
 #endif

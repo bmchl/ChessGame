@@ -7,8 +7,10 @@
 #include <iterator>
 #include <vector>
 #include <list>
-#include "Piece.h" 
+#include "Piece.h"
 
+#ifndef SQUARE_H
+#define SQUARE_H
 class Square //:public QObject
 {
 	//Q_OBJECT
@@ -22,3 +24,5 @@ public:
 private:
 	
 };
+
+#endif

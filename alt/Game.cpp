@@ -1,9 +1,14 @@
 #include "Game.h"
 
-using namespace std;
-
+Game::Game()
+{
+	board_ = Board();
+	k = King(board_.squares[0][4], 'W');
+	K = King(board_.squares[0][3], 'B');
+}
 void Game::play()
 {
+	using namespace std;
 	bool gameOver = false;
 	char turn = 'B';
 	

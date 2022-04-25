@@ -47,5 +47,8 @@
     <ClInclude Include="Chess.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="View.hpp">
+      <Filter>Vue</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
