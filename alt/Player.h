@@ -1,0 +1,11 @@
+#pragma once
+#include <string>
+#include <iostream>
+#include <memory>
+#include <functional>
+#include <cassert>
+#include <iterator>
+#include <vector>
+#include <list>
+#include "Board.h"
+#include "Square.h"
