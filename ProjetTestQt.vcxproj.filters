@@ -39,16 +39,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="View.ui">
-      <Filter>Vue</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Chess.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="View.hpp">
-      <Filter>Vue</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="View.ui">
+      <Filter>Vue</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

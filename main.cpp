@@ -4,9 +4,9 @@
 #include "Chess.hpp"
 //#include "Piece.hpp"
 //#include "Player.hpp"
-//#include "CalcWindow.hpp"
+#include "View.hpp"
 
-//#include <QApplication>
+#include <QApplication>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -49,122 +49,72 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 using namespace std;
 using namespace iter;
 using namespace gsl;
+using namespace logic;
+using namespace view;
+
+
 
 int main(int argc, char *argv[])
 {
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
-	//QApplication app(argc, argv);
+	QApplication app(argc, argv);
 	initialiserBibliothequeCours(argc, argv);
 
-	//CalcWindow calcWindow;
-	//calcWindow.show();
-	//return app.exec();
 	Board board; 
-	//King::instanceCount = 0;
-	//auto k = King::getInstance(board.squares[0][4], 'W');
 
-	King k(board.squares[0][4], 'W');
-	cout << board.squares[0][4];
-	cout << k.getCount() << endl;
-	King K(board.squares[0][3], 'B');
-	cout << board.squares[0][3];
-	cout << k.getCount() << endl;
+	King k(*board.squares[0][4], 'W');
+	cout << *board.squares[0][4];
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	King K(*board.squares[0][3], 'B');
+	cout << *board.squares[0][3];
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
 
-	cout << "performing temporary move on (0,3)" << endl;
-	TemporaryPiece* tempKing = new TemporaryPiece(K, board.squares[0][3]);
-	cout << k.getCount() << endl;
-	cout << board.squares[0][3];
-	cout << board.squares[1][3];
+	/*cout << "performing temporary move on (0,3)" << endl;
+	TemporaryPiece* tempKing = new TemporaryPiece(K, *board.squares[0][3]);
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	cout << *board.squares[0][3];
+	cout << *board.squares[1][3];
 	cout << "deleting temporary piece instance" << endl;
 	delete tempKing;
-	cout << k.getCount() << endl;
-	cout << board.squares[0][3];
-	cout << board.squares[1][3];
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	cout << *board.squares[0][3];
+	cout << *board.squares[1][3];
 	
 	cout << "new king instance is now" << endl;
-	King k3(board.squares[1][3], 'W');
-	cout << k.getCount() << endl;
-	cout << board.squares[1][3];
+	King k3(*board.squares[1][3], 'W');
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	cout << *board.squares[1][3];*/
 
 	try 
 	{
-		King K4(board.squares[0][5], 'B');
-		cout << board.squares[0][5];
+		King K4(*board.squares[0][5], 'B');
+		cout << *board.squares[0][5];
 	}
 	catch (KingInstanceException& e)
 	{
 		cout << e.what();
 	}
-	cout << board.squares[0][5];
+	cout << *board.squares[0][5];
 	cout << k.getCount() << endl;
 
-	Rook r(board.squares[4][6], 'W');
-	Knight N(board.squares[3][5], 'B');
+	Rook r(*board.squares[4][6], 'W');
+	Knight N(*board.squares[3][5], 'B');
 
-	//Player p1(board, 'W');
-	//Player p2(board, 'B');
-
-	//bool gameOver = false;
-	//char turn = 'B';
-
-	//int currentRow = 0;
-	//int currentColumn = 0;
-	//int newRow = 0;
-	//int newColumn = 0;
-
-	//cout << "game start" << endl;
-	//cout << "here are the current pieces on the board:" << endl;
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		if (board.squares[i][j].currentPiece != nullptr)
-	//		{
-	//			cout << board.squares[i][j];
-	//		}
-	//	}
-	//}
-	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE DÉROULEMENT D'UN JEU
-	//while (!gameOver)
-	//{
-	//	if ((k.isDead) || (K.isDead))
-	//	{
-	//		gameOver = true;
-	//		break;
-	//	}
-	//	if (turn == 'W') { turn = 'B'; }
-	//	else if (turn == 'B') { turn = 'W'; }
-	//	cout << "current turn: " << turn << endl;
-	//	if (turn == 'W') 
-	//	{ 
-	//		cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
-	//		cin >> currentRow;
-	//		cin >> currentColumn;
-	//		cout << "player 1: pick a destination location\n";
-	//		cin >> newRow;
-	//		cin >> newColumn;
-	//		p1.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
-	//	}
-	//	else if (turn == 'B')
-	//	{
-	//		cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
-	//		cin >> currentRow;
-	//		cin >> currentColumn;
-	//		cout << "player 2: pick a destination location\n";
-	//		cin >> newRow;
-	//		cin >> newColumn;
-	//		p2.makeMove(board.squares[currentRow][currentColumn], board.squares[newRow][newColumn]);
-	//	}
-	//}
-	//cout << "game over";
+	Player p1(board, 'W');
+	Player p2(board, 'B');
 
 	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE FONCTIONNEMENT SANS PASSER PAR LES INPUTS
-	//p2.makeMove(board.squares[0][3], board.squares[0][4]);
+	//p2.makeMove(*board.squares[0][3], *board.squares[0][4]);
+	//cout << *board.squares[0][4] << endl;
 	//p1.makeMove(board.squares[0][4], board.squares[0][5]);
 	//p1.makeMove(board.squares[4][6], board.squares[0][6]);
 	//p2.makeMove(board.squares[3][5], board.squares[1][6]);
 	//p2.makeMove(board.squares[1][6], board.squares[2][4]);
 	//p1.makeMove(board.squares[0][4], board.squares[0][6]);
+
+	Ui_ChessWindow chessWindow;
+	chessWindow.show();
+	return app.exec();
 
 	return 0;
 }
