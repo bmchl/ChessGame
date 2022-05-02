@@ -1,3 +1,11 @@
+// TD6 INF 1015
+// Michael Banna (2147128) & Nour Zahreddine (2167661)
+// fichier Chess.hpp
+// Il contient toutes les classes du projet.
+// Nous n'avons pas encore parvenu a le separer en plusieurs fichiers .h et .cpp.
+// Des améliorations sont cependant étaient faites en suivant les commentaires donnés pour le livrable 1.
+// Notre premier namespace "logic" se situe ici.
+
 #pragma once
 #include <string>
 #include <iostream>
@@ -5,12 +13,8 @@
 #include <functional>
 #include <cassert>
 #include <iterator>
-//#include "gsl/span"
 #include <vector>
 #include <list>
-//using gsl::span;
-//using namespace std;  // On le permet, mais j'ai écrit mon .hpp sans, avant de le permettre dans l'énoncé.
-
 
 //#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 ////#include <QObject>
@@ -436,5 +440,5 @@ namespace logic {
 	/*struct Position {
 		int row = 0;
 		int column = 0;
-	};*/
+	};*/ 
 }

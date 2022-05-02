@@ -1,14 +1,15 @@
 ﻿  Reading Qt configuration (C:/Qt/6.3.0/msvc2019_64/bin/qmake)
-  uic View.ui
-  bibliotheque_cours.cpp
-  verification_allocation.cpp
-  gtest-all.cc
   main.cpp
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x10b that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x13d that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x142 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x189 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(48,17): warning C4100: 'square': unreferenced formal parameter (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(51,39): warning C4100: 'square': unreferenced formal parameter (compiling source file main.cpp)
-C:\Users\banna\Documents\clahess\Chess.hpp(52,48): warning C4100: 'position': unreferenced formal parameter (compiling source file main.cpp)
-LINK : fatal error LNK1104: cannot open file 'C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exe'
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe9 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x104 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x133 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x26d that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(52,17): warning C4100: 'square': unreferenced formal parameter
+C:\Users\banna\Documents\clahess\Chess.hpp(55,39): warning C4100: 'square': unreferenced formal parameter
+C:\Users\banna\Documents\clahess\Chess.hpp(56,48): warning C4100: 'position': unreferenced formal parameter
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x73 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x77 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xaf that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe6 that is illegal in the current source character set (codepage 65001).
+     Creating library C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.lib and object C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exp
+  ProjetTestQt.vcxproj -> C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exe

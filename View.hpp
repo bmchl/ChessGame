@@ -1,3 +1,9 @@
+// TD6 INF 1015
+// Michael Banna (2147128) & Nour Zahreddine (2167661)
+// fichier View.hpp
+// C'est le fichier généré par QtDesigner (de l'extension Qt VS Tools).
+// Malgré le fait qu'il compile, l'interface que nous avons conçu n'apparait pas.
+// Notre second namespace "view" se situe ici.
 /********************************************************************************
 ** Form generated from reading UI file 'ViewXhXAii.ui'
 **

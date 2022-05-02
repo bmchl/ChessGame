@@ -1,9 +1,7 @@
-﻿//Projet final INF1015
+﻿//TD6 INF 1015
 //Michael Banna (2147128) & Nour Zahreddine (2167661)
-
+//Le code principal qui contient les démonstrations des implémentations des points 2 et 3 du travail pratique.
 #include "Chess.hpp"
-//#include "Piece.hpp"
-//#include "Player.hpp"
 #include "View.hpp"
 
 #include <QApplication>
@@ -52,8 +50,6 @@ using namespace gsl;
 using namespace logic;
 using namespace view;
 
-
-
 int main(int argc, char *argv[])
 {
 	bibliotheque_cours::VerifierFuitesAllocations verifierFuitesAllocations;
@@ -69,22 +65,27 @@ int main(int argc, char *argv[])
 	cout << *board.squares[0][3];
 	cout << "the current number of instances of king is: " << k.getCount() << endl;
 
-	/*cout << "performing temporary move on (0,3)" << endl;
+	cout << "\n---------------------------------------------" << endl;
+	cout << "3. RAII d'une pièce temporaire\n" << endl;
+
+	cout << "instanciating RAII" << endl;
 	TemporaryPiece* tempKing = new TemporaryPiece(K, *board.squares[0][3]);
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	cout << "the current number of instances of king is: " << k.getCount() << endl; 
+	// On est encore à 2 instances car la classe prend l'objet par référence.
 	cout << *board.squares[0][3];
-	cout << *board.squares[1][3];
 	cout << "deleting temporary piece instance" << endl;
 	delete tempKing;
 	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	// On revient à 1 instance car l'implémentation RAII appelle le destructeur de l'objet.
 	cout << *board.squares[0][3];
-	cout << *board.squares[1][3];
-	
-	cout << "new king instance is now" << endl;
+
+
+	cout << "\n---------------------------------------------" << endl;
+	cout << "2. Compteur d'instances et exceptions\n" << endl;
 	King k3(*board.squares[1][3], 'W');
 	cout << "the current number of instances of king is: " << k.getCount() << endl;
-	cout << *board.squares[1][3];*/
-
+	// On initialise un nouvel objet pour forcer le programme à rencontrer l'exception.
+	cout << *board.squares[1][3];
 	try 
 	{
 		King K4(*board.squares[0][5], 'B');
@@ -92,25 +93,11 @@ int main(int argc, char *argv[])
 	}
 	catch (KingInstanceException& e)
 	{
-		cout << e.what();
+		cout << "exception thrown: " << e.what();
 	}
 	cout << *board.squares[0][5];
-	cout << k.getCount() << endl;
-
-	Rook r(*board.squares[4][6], 'W');
-	Knight N(*board.squares[3][5], 'B');
-
-	Player p1(board, 'W');
-	Player p2(board, 'B');
-
-	//DÉCOMMENTER LES LIGNES SUIVANTES POUR TESTER LE FONCTIONNEMENT SANS PASSER PAR LES INPUTS
-	//p2.makeMove(*board.squares[0][3], *board.squares[0][4]);
-	//cout << *board.squares[0][4] << endl;
-	//p1.makeMove(board.squares[0][4], board.squares[0][5]);
-	//p1.makeMove(board.squares[4][6], board.squares[0][6]);
-	//p2.makeMove(board.squares[3][5], board.squares[1][6]);
-	//p2.makeMove(board.squares[1][6], board.squares[2][4]);
-	//p1.makeMove(board.squares[0][4], board.squares[0][6]);
+	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	// On retrouve nos 2 instances de King. Ce code s'execute malgré le fait qu'on rencontre une exception.
 
 	Ui_ChessWindow chessWindow;
 	chessWindow.show();
