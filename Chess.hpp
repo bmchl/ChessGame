@@ -15,6 +15,7 @@
 #include <iterator>
 #include <vector>
 #include <list>
+#include "Position.hpp"
 
 //#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 ////#include <QObject>
@@ -34,8 +35,10 @@ namespace logic {
 	public:
 		Square() :row_(0), column_(0) {};
 		Square(int x, int y) : row_(x), column_(y) {};
+		Square(std::shared_ptr<Position> position) : position_(position), row_(position->row), column_(position->column) {};
 		int row_ = 0;
 		int column_ = 0;
+		std::shared_ptr<Position> position_ = nullptr;
 		int maxCoordinates_ = 7;
 		std::shared_ptr<Piece> currentPiece = nullptr;
 	private:
@@ -48,36 +51,35 @@ namespace logic {
 	public:
 		Piece() = default;
 		virtual ~Piece() = default;
-
-		Piece(Square& square, char color) : color_(color)
+		Piece(char color) : color_(color) {};
+		/*Piece(Square& square, char color) : color_(color)
 		{
-		}
-		virtual void assignToSquare(Square& square) {};
-		virtual void updatePossiblePositions(Square& position) {};
-		bool validateMove(Square& position)
+		}*/
+		//virtual void assignToSquare(Square& square) {};
+		virtual void updatePossiblePositions(Position& position) {};
+		bool validateMove(Position& position)
 		{
 			bool valid = false;
 			for (auto& possiblePosition : possiblePositions)
 			{
-				if ((position.row_ == possiblePosition->row_) &&
-					(position.column_ == possiblePosition->column_))
+				if ((position.row == possiblePosition->row) &&
+					(position.column == possiblePosition->column))
 				{
 					valid = true;
 					std::cout << "move is among the piece's possible positions" << std::endl;
-					clearPossiblePositions();
 				}
 			}
 			return valid;
 		};
 		virtual void talk(std::ostream& os) const { os << "plain piece"; };
 		char color_ = 'W';
-		void clearPossiblePositions()
+		/*void clearPossiblePositions()
 		{
 			while (!possiblePositions.empty())
 			{
 				delete possiblePositions.front(), possiblePositions.pop_front();
 			}
-		}
+		}*/
 		void addPossiblePosition(int newX, int newY)
 		{
 			if ((newX <= 7) &&
@@ -85,10 +87,10 @@ namespace logic {
 				(newX >= 0) &&
 				(newY >= 0))
 			{
-				possiblePositions.push_back(new Square(newX, newY));
+				possiblePositions.push_back(new Position{ newX, newY });
 			}
 		}
-		std::list<Square*> possiblePositions;
+		std::list<Position*> possiblePositions;
 		bool isDead = false;
 	private:
 	};
@@ -132,7 +134,7 @@ namespace logic {
 			{
 				for (int k = 0; k < 8; k++)
 				{
-					squares[i][k] = std::make_unique<Square>(i, k);
+					squares[i][k] = std::make_unique<Square>(std::make_shared<Position>( i,k ));
 				}
 			}
 		}
@@ -160,15 +162,21 @@ namespace logic {
 					std::cout << *newPosition.currentPiece << " is dead" << std::endl;
 					newPosition.currentPiece = nullptr;
 				}
-				currentPosition.currentPiece->assignToSquare(newPosition);
-				currentPosition.currentPiece = nullptr;
+				//currentPosition.currentPiece->assignToSquare(newPosition);
+				newPosition.currentPiece = move(currentPosition.currentPiece);
+				//currentPosition.currentPiece = nullptr;
 				std::cout << "positions changed" << std::endl;
+				newPosition.currentPiece->possiblePositions.clear();
 			}
 			else
 			{
 				std::cout << "invalid move" << std::endl;
 			}
 		};
+		void placePiece(std::shared_ptr<Piece> piece, Position position)
+		{
+			squares[position.row][position.column]->currentPiece = piece;
+		}
 		/*void capturePiece(Square& position)
 		{
 			position.currentPiece->isDead = true;
@@ -176,21 +184,20 @@ namespace logic {
 		}*/
 		bool isValidMove(Square& currentPosition, Square& newPosition)
 		{
-			currentPosition.currentPiece->updatePossiblePositions(currentPosition);
+			currentPosition.currentPiece->updatePossiblePositions(*currentPosition.position_);
 			currentPosition.currentPiece->possiblePositions.remove_if([this, &currentPosition](auto& pos)
-				{ return checkPositionOverlap(currentPosition, *pos); });
+				{ return checkPositionOverlap(currentPosition, *squares[pos->row][pos->column]); });
 			std::cout << "possible positions:" << std::endl;
 			for (auto&& position : currentPosition.currentPiece->possiblePositions)
 			{
-				std::cout << *position;
+				std::cout << *squares[position->row][position->column];
 			}
 			//TODO: verifier si parcours entre currentPosition et newPosition est libre
-			return currentPosition.currentPiece->validateMove(newPosition);
+			return currentPosition.currentPiece->validateMove(*newPosition.position_);
 		}
 	private:
 
 	};
-
 
 	class KingInstanceException : public std::logic_error
 	{
@@ -202,13 +209,16 @@ namespace logic {
 	{
 	public:
 		King() = default;
-		King(Square& square, char color) : Piece(square, color)
+		//King(char color) : Piece(color)
+		//{
+
+		//}
+		King(char color) : Piece( color)
 		{
 			if (instanceCount_ >= 2)
 			{
 				throw KingInstanceException("max instances reached\n");
 			}
-			assignToSquare(square);
 			instanceCount_++;
 			std::cout << "created new ";
 			talk(std::cout);
@@ -223,22 +233,22 @@ namespace logic {
 		};
 		static int getCount() { return instanceCount_; }
 
-		void assignToSquare(Square& square)
-		{
-			square.currentPiece = std::make_shared<King>(*this);
-		}
+		//void assignToSquare(Square& square)
+		//{
+		//	square.currentPiece = std::make_shared<King>(*this);
+		//}
 
-		void updatePossiblePositions(Square& currentPosition) override
+		void updatePossiblePositions(Position& currentPosition) override
 		{
-			addPossiblePosition(currentPosition.row_, currentPosition.column_);
-			addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_);
-			addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_);
-			addPossiblePosition(currentPosition.row_, currentPosition.column_ + 1);
-			addPossiblePosition(currentPosition.row_, currentPosition.column_ - 1);
-			addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ + 1);
-			addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ - 1);
-			addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ - 1);
-			addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ + 1);
+			addPossiblePosition(currentPosition.row, currentPosition.column);
+			addPossiblePosition(currentPosition.row + 1, currentPosition.column);
+			addPossiblePosition(currentPosition.row - 1, currentPosition.column);
+			addPossiblePosition(currentPosition.row, currentPosition.column + 1);
+			addPossiblePosition(currentPosition.row, currentPosition.column - 1);
+			addPossiblePosition(currentPosition.row + 1, currentPosition.column + 1);
+			addPossiblePosition(currentPosition.row - 1, currentPosition.column - 1);
+			addPossiblePosition(currentPosition.row + 1, currentPosition.column - 1);
+			addPossiblePosition(currentPosition.row - 1, currentPosition.column + 1);
 		};
 		void talk(std::ostream& os) const override
 		{
@@ -252,23 +262,16 @@ namespace logic {
 	class Rook : public Piece
 	{
 	public:
-		Rook(Square& square, char color) :Piece(square, color)
-		{
-			assignToSquare(square);
-		};
+		Rook(char color) :Piece(color) {};
 
-		void assignToSquare(Square& square)
-		{
-			square.currentPiece = std::make_shared<Rook>(*this);
-		}
-		void updatePossiblePositions(Square& currentPosition) override
+		void updatePossiblePositions(Position& currentPosition) override
 		{
 			for (int i = 1; i < 7; i++)
 			{
-				addPossiblePosition(currentPosition.row_, currentPosition.column_ + i);
-				addPossiblePosition(currentPosition.row_, currentPosition.column_ - i);
-				addPossiblePosition(currentPosition.row_ + i, currentPosition.column_);
-				addPossiblePosition(currentPosition.row_ - i, currentPosition.column_);
+				addPossiblePosition(currentPosition.row, currentPosition.column + i);
+				addPossiblePosition(currentPosition.row, currentPosition.column - i);
+				addPossiblePosition(currentPosition.row + i, currentPosition.column);
+				addPossiblePosition(currentPosition.row - i, currentPosition.column);
 			}
 		};
 		void talk(std::ostream& os) const override
@@ -282,59 +285,55 @@ namespace logic {
 	class Knight : public Piece
 	{
 	public:
-		Knight(Square& square, char color) : Piece(square, color)
+		Knight(char color) : Piece(color) {};
+
+		void updatePossiblePositions(Position& currentPosition) override
 		{
-			assignToSquare(square);
+			addPossiblePosition(currentPosition.row + 1, currentPosition.column + 2);
+			addPossiblePosition(currentPosition.row + 2, currentPosition.column + 1);
+			addPossiblePosition(currentPosition.row - 1, currentPosition.column - 2);
+			addPossiblePosition(currentPosition.row - 2, currentPosition.column - 1);
+
+			addPossiblePosition(currentPosition.row + 1, currentPosition.column - 2);
+			addPossiblePosition(currentPosition.row + 2, currentPosition.column - 1);
+			addPossiblePosition(currentPosition.row - 1, currentPosition.column + 2);
+			addPossiblePosition(currentPosition.row - 2, currentPosition.column + 1);
 		};
 
-		void assignToSquare(Square& square)
-		{
-			square.currentPiece = std::make_shared<Knight>(*this);
-		}
-
-		void updatePossiblePositions(Square& currentPosition) override
-		{
-			addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ + 2);
-			addPossiblePosition(currentPosition.row_ + 2, currentPosition.column_ + 1);
-			addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ - 2);
-			addPossiblePosition(currentPosition.row_ - 2, currentPosition.column_ - 1);
-
-			addPossiblePosition(currentPosition.row_ + 1, currentPosition.column_ - 2);
-			addPossiblePosition(currentPosition.row_ + 2, currentPosition.column_ - 1);
-			addPossiblePosition(currentPosition.row_ - 1, currentPosition.column_ + 2);
-			addPossiblePosition(currentPosition.row_ - 2, currentPosition.column_ + 1);
-		};
 		void talk(std::ostream& os) const override
 		{
 			os << "knight (" << color_ << ")";
 		}
-
 	private:
+		
 	};
 
-	class Player
-	{
-	public:
-		Player() = default;// { board_ = Board(); };
-		Player(Board& board, char color) : board_(&board), color_(color) {  };
-		Player operator = (const Player& p) { return Player(*p.board_, p.color_); }
-		char color_;
-		void makeMove(Square& currentPosition, Square& newPosition)
-		{
-			std::cout << "verifying correct move" << std::endl;
-			if (currentPosition.currentPiece->color_ == color_)
-			{
-				std::cout << "right color" << std::endl;
-				board_->setPosition(currentPosition, newPosition);
-			}
-			else
-			{
-				std::cout << "wrong color" << std::endl;
-			}
-		}
-	private:
-		Board* board_;
-	};
+	//class Player
+	//{
+	//public:
+	//	Player() = default; 
+	//	// { board_ = Board(); };
+	//	Player(Board& board, char color) : board_(&board), color_(color) {  };
+	//	Player operator = (const Player& p) { return Player(*p.board_, p.color_); }
+	//	char color_;
+	//	void makeMove(Square& currentPosition, Square& newPosition)
+	//	{
+	//		std::cout << "verifying correct move" << std::endl;
+	//		std::cout << "my color is: " << color_ << std::endl;
+	//		std::cout << "the piece's color is: " << currentPosition.currentPiece->color_ << std::endl;
+	//		if (currentPosition.currentPiece->color_ == color_)
+	//		{
+	//			std::cout << "right color" << std::endl;
+	//			board_->setPosition(currentPosition, newPosition);
+	//		}
+	//		else
+	//		{
+	//			std::cout << "wrong color" << std::endl;
+	//		}
+	//	}
+	//private:
+	//	Board* board_;
+	//};
 
 	class TemporaryPiece
 	{
@@ -362,28 +361,46 @@ namespace logic {
 	private:
 		Board board;
 
-		Player p1;
-		Player p2;
+		//Player p1;
+		//Player p2;
 
 		King k;
 		King K;
 
 	public:
+		char turn = 'B';
 		Game()
 		{
 			board = Board();
-			p1 = Player(board, 'W');
-			p2 = Player(board, 'B');
+			//p1 = Player(board, 'W');
+			//p2 = Player(board, 'B');
+			initializePieces();
+		}
+		void makeMove(Square& currentPosition, Square& newPosition)
+		{
+			std::cout << "verifying correct move" << std::endl;
+			std::cout << "my color is: " << turn << std::endl;
+			std::cout << "the piece's color is: " << currentPosition.currentPiece->color_ << std::endl;
+			if (currentPosition.currentPiece->color_ == turn)
+			{
+				std::cout << "right color" << std::endl;
+				board.setPosition(currentPosition, newPosition);
+			}
+			else
+			{
+				std::cout << "wrong color" << std::endl;
+			}
 		}
 		void initializePieces()
 		{
-			k = King(*board.squares[0][3], 'W');
-			k = King(*board.squares[7][3], 'B');
+			k = King('W');
+			board.placePiece(std::make_shared<King>(k), Position{ 0,3 });
+			K = King('B');
+			board.placePiece(std::make_shared<King>(K), Position{7,3});
 		}
 		void play()
 		{
 			bool gameOver = false;
-			char turn = 'B';
 
 			int currentRow = 0;
 			int currentColumn = 0;
@@ -420,7 +437,7 @@ namespace logic {
 					std::cout << "player 1: pick a destination location\n";
 					std::cin >> newRow;
 					std::cin >> newColumn;
-					p1.makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
+					makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
 				}
 				else if (turn == 'B')
 				{
@@ -430,15 +447,10 @@ namespace logic {
 					std::cout << "player 2: pick a destination location\n";
 					std::cin >> newRow;
 					std::cin >> newColumn;
-					p2.makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
+					makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
 				}
 			}
 			std::cout << "game over";
 		}
 	};
-
-	/*struct Position {
-		int row = 0;
-		int column = 0;
-	};*/ 
 }

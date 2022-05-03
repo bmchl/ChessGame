@@ -56,53 +56,57 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 	initialiserBibliothequeCours(argc, argv);
 
-	Board board; 
+	//Game game;
+	//game.play();
+	//Board board; 
 
-	King k(*board.squares[0][4], 'W');
-	cout << *board.squares[0][4];
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
-	King K(*board.squares[0][3], 'B');
-	cout << *board.squares[0][3];
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
+	//King k('W');
+	//board.placePiece(make_shared<King>(k), Position{ 0,4 });
+	//cout << *board.squares[0][4];
+	//cout << "the current number of instances of king is: " << k.getCount() << endl;
+	//King K('B');
+	//board.placePiece(make_shared<King>(K), Position{ 0,3 });
+	//cout << *board.squares[0][3];
+	//cout << "the current number of instances of king is: " << k.getCount() << endl;
 
-	cout << "\n---------------------------------------------" << endl;
-	cout << "3. RAII d'une pièce temporaire\n" << endl;
+	//cout << "\n---------------------------------------------" << endl;
+	//cout << "3. RAII d'une pièce temporaire\n" << endl;
 
-	cout << "instanciating RAII" << endl;
-	TemporaryPiece* tempKing = new TemporaryPiece(K, *board.squares[0][3]);
-	cout << "the current number of instances of king is: " << k.getCount() << endl; 
-	// On est encore à 2 instances car la classe prend l'objet par référence.
-	cout << *board.squares[0][3];
-	cout << "deleting temporary piece instance" << endl;
-	delete tempKing;
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
-	// On revient à 1 instance car l'implémentation RAII appelle le destructeur de l'objet.
-	cout << *board.squares[0][3];
+	//cout << "instanciating RAII" << endl;
+	//TemporaryPiece* tempKing = new TemporaryPiece(K, *board.squares[0][3]);
+	//cout << "the current number of instances of king is: " << k.getCount() << endl; 
+	//// On est encore à 2 instances car la classe prend l'objet par référence.
+	//cout << *board.squares[0][3];
+	//cout << "deleting temporary piece instance" << endl;
+	//delete tempKing;
+	//cout << "the current number of instances of king is: " << k.getCount() << endl;
+	//// On revient à 1 instance car l'implémentation RAII appelle le destructeur de l'objet.
+	//cout << *board.squares[0][3];
 
 
-	cout << "\n---------------------------------------------" << endl;
-	cout << "2. Compteur d'instances et exceptions\n" << endl;
-	King k3(*board.squares[1][3], 'W');
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
-	// On initialise un nouvel objet pour forcer le programme à rencontrer l'exception.
-	cout << *board.squares[1][3];
-	try 
-	{
-		King K4(*board.squares[0][5], 'B');
-		cout << *board.squares[0][5];
-	}
-	catch (KingInstanceException& e)
-	{
-		cout << "exception thrown: " << e.what();
-	}
-	cout << *board.squares[0][5];
-	cout << "the current number of instances of king is: " << k.getCount() << endl;
-	// On retrouve nos 2 instances de King. Ce code s'execute malgré le fait qu'on rencontre une exception.
-
-	Ui_ChessWindow chessWindow;
+	//cout << "\n---------------------------------------------" << endl;
+	//cout << "2. Compteur d'instances et exceptions\n" << endl;
+	//King k3(*board.squares[1][3], 'W');
+	//cout << "the current number of instances of king is: " << k.getCount() << endl;
+	//// On initialise un nouvel objet pour forcer le programme à rencontrer l'exception.
+	//cout << *board.squares[1][3];
+	//try 
+	//{
+	//	King K4(*board.squares[0][5], 'B');
+	//	cout << *board.squares[0][5];
+	//}
+	//catch (KingInstanceException& e)
+	//{
+	//	cout << "exception thrown: " << e.what();
+	//}
+	//cout << *board.squares[0][5];
+	//cout << "the current number of instances of king is: " << k.getCount() << endl;
+	//// On retrouve nos 2 instances de King. Ce code s'execute malgré le fait qu'on rencontre une exception.
+	Game* game = new Game;
+	ChessWindow chessWindow(game);
 	chessWindow.show();
 	return app.exec();
-
+	//delete game;
 	return 0;
 }
    

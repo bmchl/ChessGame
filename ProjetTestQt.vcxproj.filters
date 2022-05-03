@@ -37,12 +37,15 @@
     <ClCompile Include="googletest\src\gtest-all.cc">
       <Filter>Sources Bibliotheques</Filter>
     </ClCompile>
+    <ClCompile Include="View.cpp">
+      <Filter>Vue</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="View.hpp">
+    <ClInclude Include="Position.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,5 +53,10 @@
     <QtUic Include="View.ui">
       <Filter>Vue</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="View.hpp">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

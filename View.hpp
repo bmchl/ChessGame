@@ -1,4 +1,4 @@
-// TD6 INF 1015
+// TD6 INF1015
 // Michael Banna (2147128) & Nour Zahreddine (2167661)
 // fichier View.hpp
 // C'est le fichier généré par QtDesigner (de l'extension Qt VS Tools).
@@ -33,70 +33,71 @@ namespace view
         QWidget* centralwidget;
         QWidget* gridLayoutWidget;
         QGridLayout* gridLayout;
-        QPushButton* pushButton13;
-        QPushButton* pushButton55;
-        QPushButton* pushButton11;
-        QPushButton* pushButton32;
-        QPushButton* pushButton62;
-        QPushButton* pushButton71;
-        QPushButton* pushButton45;
-        QPushButton* pushButton06;
-        QPushButton* pushButton51;
-        QPushButton* pushButton02;
-        QPushButton* pushButton64;
-        QPushButton* pushButton07;
-        QPushButton* pushButton16;
-        QPushButton* pushButton25;
-        QPushButton* pushButton43;
-        QPushButton* pushButton50;
-        QPushButton* pushButton03;
-        QPushButton* pushButton27;
-        QPushButton* pushButton72;
-        QPushButton* pushButton53;
-        QPushButton* pushButton05;
-        QPushButton* pushButton47;
-        QPushButton* pushButton31;
-        QPushButton* pushButton22;
-        QPushButton* pushButton56;
-        QPushButton* pushButton65;
-        QPushButton* pushButton60;
-        QPushButton* pushButton40;
-        QPushButton* pushButton20;
-        QPushButton* pushButton52;
-        QPushButton* pushButton10;
-        QPushButton* pushButton73;
-        QPushButton* pushButton21;
-        QPushButton* pushButton66;
-        QPushButton* pushButton14;
-        QPushButton* pushButton75;
-        QPushButton* pushButton63;
-        QPushButton* pushButton04;
-        QPushButton* pushButton17;
-        QPushButton* pushButton70;
-        QPushButton* pushButton61;
-        QPushButton* pushButton26;
-        QPushButton* pushButton35;
-        QPushButton* pushButton15;
-        QPushButton* pushButton01;
-        QPushButton* pushButton36;
-        QPushButton* pushButton41;
-        QPushButton* pushButton54;
-        QPushButton* pushButton34;
-        QPushButton* pushButton12;
-        QPushButton* pushButton67;
-        QPushButton* pushButton00;
-        QPushButton* pushButton37;
-        QPushButton* pushButton42;
-        QPushButton* pushButton76;
-        QPushButton* pushButton74;
-        QPushButton* pushButton23;
-        QPushButton* pushButton33;
-        QPushButton* pushButton57;
-        QPushButton* pushButton30;
-        QPushButton* pushButton44;
-        QPushButton* pushButton24;
-        QPushButton* pushButton46;
-        QPushButton* pushButton77;
+        QPushButton* chessSquares[8][8];
+        //QPushButton* pushButton13;
+        //QPushButton* pushButton55;
+        //QPushButton* pushButton11;
+        //QPushButton* pushButton32;
+        //QPushButton* pushButton62;
+        //QPushButton* pushButton71;
+        //QPushButton* pushButton45;
+        //QPushButton* pushButton06;
+        //QPushButton* pushButton51;
+        //QPushButton* pushButton02;
+        //QPushButton* pushButton64;
+        //QPushButton* pushButton07;
+        //QPushButton* pushButton16;
+        //QPushButton* pushButton25;
+        //QPushButton* pushButton43;
+        //QPushButton* pushButton50;
+        //QPushButton* pushButton03;
+        //QPushButton* pushButton27;
+        //QPushButton* pushButton72;
+        //QPushButton* pushButton53;
+        //QPushButton* pushButton05;
+        //QPushButton* pushButton47;
+        //QPushButton* pushButton31;
+        //QPushButton* pushButton22;
+        //QPushButton* pushButton56;
+        //QPushButton* pushButton65;
+        //QPushButton* pushButton60;
+        //QPushButton* pushButton40;
+        //QPushButton* pushButton20;
+        //QPushButton* pushButton52;
+        //QPushButton* pushButton10;
+        //QPushButton* pushButton73;
+        //QPushButton* pushButton21;
+        //QPushButton* pushButton66;
+        //QPushButton* pushButton14;
+        //QPushButton* pushButton75;
+        //QPushButton* pushButton63;
+        //QPushButton* pushButton04;
+        //QPushButton* pushButton17;
+        //QPushButton* pushButton70;
+        //QPushButton* pushButton61;
+        //QPushButton* pushButton26;
+        //QPushButton* pushButton35;
+        //QPushButton* pushButton15;
+        //QPushButton* pushButton01;
+        //QPushButton* pushButton36;
+        //QPushButton* pushButton41;
+        //QPushButton* pushButton54;
+        //QPushButton* pushButton34;
+        //QPushButton* pushButton12;
+        //QPushButton* pushButton67;
+        //QPushButton* pushButton00;
+        //QPushButton* pushButton37;
+        //QPushButton* pushButton42;
+        //QPushButton* pushButton76;
+        //QPushButton* pushButton74;
+        //QPushButton* pushButton23;
+        //QPushButton* pushButton33;
+        //QPushButton* pushButton57;
+        //QPushButton* pushButton30;
+        //QPushButton* pushButton44;
+        //QPushButton* pushButton24;
+        //QPushButton* pushButton46;
+        //QPushButton* pushButton77;
         QWidget* horizontalLayoutWidget;
         QHBoxLayout* horizontalLayout_3;
         QVBoxLayout* verticalLayout_3;
@@ -123,6 +124,20 @@ namespace view
             gridLayout = new QGridLayout(gridLayoutWidget);
             gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
             gridLayout->setContentsMargins(0, 0, 0, 0);
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0, j < 8, j++)
+                {
+                    chessSquares[i][j] = new QPushButton(gridLayoutWidget);
+                    chessSquares[i][j]->setMaximumSize(QSize(80, 80));
+                    chessSquares[i][j]->setStyleSheet(QString::fromUtf8("background-color:rgb(241, 237, 233)"));
+                    chessSquares[i][j]->setCheckable(false);
+
+                    gridLayout->addWidget(chessSquares[i][j], i, j, 1, 1);
+                }
+            }
+
             pushButton13 = new QPushButton(gridLayoutWidget);
             pushButton13->setObjectName(QString::fromUtf8("pushButton13"));
             pushButton13->setMinimumSize(QSize(80, 80));

@@ -1,10 +1,8 @@
-c:\users\banna\documents\clahess\x64\debug\main.obj
 c:\users\banna\documents\clahess\x64\debug\gtest-all.obj
-c:\users\banna\documents\clahess\x64\debug\bibliotheque_cours.obj
 c:\users\banna\documents\clahess\x64\debug\verification_allocation.obj
-c:\users\banna\documents\clahess\x64\debug\view.obj
+c:\users\banna\documents\clahess\x64\debug\main.obj
+c:\users\banna\documents\clahess\x64\debug\bibliotheque_cours.obj
 c:\users\banna\documents\clahess\x64\debug\vc142.pdb
-c:\users\banna\documents\clahess\x64\debug\moc\moc_view.cpp
 c:\users\banna\documents\clahess\x64\debug\uic\ui_view.h
 c:\users\banna\documents\clahess\x64\debug\projettestqt.lib
 c:\users\banna\documents\clahess\x64\debug\projettestqt.exp
@@ -16,8 +14,6 @@ c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\cl.write.1.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\link.command.1.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\link.read.1.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\link.write.1.tlog
-c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\moc.read.1u.tlog
-c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\moc.write.1u.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\projettestqt.write.1u.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\uic.read.1u.tlog
 c:\users\banna\documents\clahess\x64\debug\projettestqt.tlog\uic.write.1u.tlog

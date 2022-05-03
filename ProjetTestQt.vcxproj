@@ -115,10 +115,12 @@
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.hpp" />
-    <ClInclude Include="View.hpp" />
+    <ClInclude Include="Position.hpp" />
+    <QtMoc Include="View.hpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="View.ui" />

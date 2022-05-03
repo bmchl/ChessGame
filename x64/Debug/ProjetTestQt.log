@@ -1,15 +1,7 @@
 ﻿  Reading Qt configuration (C:/Qt/6.3.0/msvc2019_64/bin/qmake)
-  main.cpp
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe9 that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x104 that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x133 that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x26d that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\Chess.hpp(52,17): warning C4100: 'square': unreferenced formal parameter
-C:\Users\banna\Documents\clahess\Chess.hpp(55,39): warning C4100: 'square': unreferenced formal parameter
-C:\Users\banna\Documents\clahess\Chess.hpp(56,48): warning C4100: 'position': unreferenced formal parameter
-C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x73 that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x77 that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xaf that is illegal in the current source character set (codepage 65001).
-C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe6 that is illegal in the current source character set (codepage 65001).
-     Creating library C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.lib and object C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exp
-  ProjetTestQt.vcxproj -> C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exe
+  View.cpp
+C:\Users\banna\Documents\clahess\View.cpp(30,17): error C7568: argument list missing after assumed function template 'is_same_v'
+C:\Users\banna\Documents\clahess\View.cpp(64): message : see reference to function template instantiation 'QPushButton *view::ChessWindow::addSquare<nullptr>(int,int)' being compiled
+C:\Users\banna\Documents\clahess\View.cpp(30): error C2062: type 'unknown-type' unexpected
+C:\Users\banna\Documents\clahess\View.cpp(31,1): error C2143: syntax error: missing ';' before '{'
+C:\Users\banna\Documents\clahess\View.cpp(31,1): error C2059: syntax error: ')'
