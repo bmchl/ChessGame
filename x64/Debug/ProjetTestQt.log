@@ -1,7 +1,24 @@
 ﻿  Reading Qt configuration (C:/Qt/6.3.0/msvc2019_64/bin/qmake)
-  View.cpp
-C:\Users\banna\Documents\clahess\View.cpp(30,17): error C7568: argument list missing after assumed function template 'is_same_v'
-C:\Users\banna\Documents\clahess\View.cpp(64): message : see reference to function template instantiation 'QPushButton *view::ChessWindow::addSquare<nullptr>(int,int)' being compiled
-C:\Users\banna\Documents\clahess\View.cpp(30): error C2062: type 'unknown-type' unexpected
-C:\Users\banna\Documents\clahess\View.cpp(31,1): error C2143: syntax error: missing ';' before '{'
-C:\Users\banna\Documents\clahess\View.cpp(31,1): error C2059: syntax error: ')'
+  uic View.ui
+  moc View.hpp
+  bibliotheque_cours.cpp
+  verification_allocation.cpp
+  gtest-all.cc
+  main.cpp
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe9 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x104 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x133 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x284 that is illegal in the current source character set (codepage 65001). (compiling source file main.cpp)
+  moc_View.cpp
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x72 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0x76 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xae that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\View.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe5 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0xe9 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x104 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x133 that is illegal in the current source character set (codepage 65001).
+C:\Users\banna\Documents\clahess\Chess.hpp(1,1): warning C4828: The file contains a character starting at offset 0x284 that is illegal in the current source character set (codepage 65001).
+moc_View.obj : error LNK2005: "class std::basic_ostream<char,struct std::char_traits<char> > & __cdecl logic::operator<<(class std::basic_ostream<char,struct std::char_traits<char> > &,class logic::Piece const &)" (??6logic@@YAAEAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AEAV12@AEBVPiece@0@@Z) already defined in main.obj
+moc_View.obj : error LNK2005: "class std::basic_ostream<char,struct std::char_traits<char> > & __cdecl logic::operator<<(class std::basic_ostream<char,struct std::char_traits<char> > &,class logic::Square const &)" (??6logic@@YAAEAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AEAV12@AEBVSquare@0@@Z) already defined in main.obj
+     Creating library C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.lib and object C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exp
+C:\Users\banna\Documents\clahess\x64\Debug\ProjetTestQt.exe : fatal error LNK1169: one or more multiply defined symbols found

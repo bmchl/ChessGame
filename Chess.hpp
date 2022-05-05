@@ -17,9 +17,10 @@
 #include <list>
 #include "Position.hpp"
 
-//#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
-////#include <QObject>
-//#pragma pop()
+#pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
+#include <QObject>
+#pragma pop()
+
 namespace logic {
 	class Board;
 	class Square;
@@ -356,8 +357,9 @@ namespace logic {
 		Square& position_;
 	};
 
-	class Game
+	class Game//: public QObject
 	{
+		//Q_OBJECT
 	private:
 		Board board;
 
@@ -367,6 +369,26 @@ namespace logic {
 		King k;
 		King K;
 
+		std::vector<Piece> pieces;
+
+	/*signals:
+		void changePosition(Position& start, Position& end) {};
+		void removePiece() {};
+		void highlightPossiblePositions(std::list<Position*>) {};
+
+	public slots:
+		void refreshPossiblePositions(Position& position)
+		{
+
+		}
+		void addPiece(char type, Position& position)
+		{
+			switch (type)
+			{
+			case 'K':
+				board.placePiece(std::make_shared<King>(k), position);
+			}
+		}*/
 	public:
 		char turn = 'B';
 		Game()
@@ -374,7 +396,7 @@ namespace logic {
 			board = Board();
 			//p1 = Player(board, 'W');
 			//p2 = Player(board, 'B');
-			initializePieces();
+			//initializePieces();
 		}
 		void makeMove(Square& currentPosition, Square& newPosition)
 		{

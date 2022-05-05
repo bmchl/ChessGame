@@ -23,27 +23,32 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_view__ChessWindow_t {
-    const uint offsetsAndSize[18];
-    char stringdata0[81];
+    const uint offsetsAndSize[26];
+    char stringdata0[133];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_view__ChessWindow_t, stringdata0) + ofs), len 
 static const qt_meta_stringdata_view__ChessWindow_t qt_meta_stringdata_view__ChessWindow = {
     {
 QT_MOC_LITERAL(0, 17), // "view::ChessWindow"
-QT_MOC_LITERAL(18, 14), // "selectedSquare"
-QT_MOC_LITERAL(33, 8), // "Position"
-QT_MOC_LITERAL(42, 0), // ""
-QT_MOC_LITERAL(43, 1), // "x"
-QT_MOC_LITERAL(45, 1), // "y"
-QT_MOC_LITERAL(47, 12), // "QPushButton*"
-QT_MOC_LITERAL(60, 6), // "button"
-QT_MOC_LITERAL(67, 13) // "pieceSelected"
+QT_MOC_LITERAL(18, 14), // "option1Toggled"
+QT_MOC_LITERAL(33, 0), // ""
+QT_MOC_LITERAL(34, 7), // "checked"
+QT_MOC_LITERAL(42, 14), // "option2Toggled"
+QT_MOC_LITERAL(57, 14), // "option3Toggled"
+QT_MOC_LITERAL(72, 14), // "option4Toggled"
+QT_MOC_LITERAL(87, 19), // "getSelectedPosition"
+QT_MOC_LITERAL(107, 8), // "Position"
+QT_MOC_LITERAL(116, 1), // "x"
+QT_MOC_LITERAL(118, 1), // "y"
+QT_MOC_LITERAL(120, 7), // "setMode"
+QT_MOC_LITERAL(128, 4) // "mode"
 
     },
-    "view::ChessWindow\0selectedSquare\0"
-    "Position\0\0x\0y\0QPushButton*\0button\0"
-    "pieceSelected"
+    "view::ChessWindow\0option1Toggled\0\0"
+    "checked\0option2Toggled\0option3Toggled\0"
+    "option4Toggled\0getSelectedPosition\0"
+    "Position\0x\0y\0setMode\0mode"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,7 +58,7 @@ static const uint qt_meta_data_view__ChessWindow[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,12 +66,20 @@ static const uint qt_meta_data_view__ChessWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    3,   26,    3, 0x0a,    1 /* Public */,
-       8,    1,   33,    3, 0x0a,    5 /* Public */,
+       1,    1,   50,    2, 0x0a,    1 /* Public */,
+       4,    1,   53,    2, 0x0a,    3 /* Public */,
+       5,    1,   56,    2, 0x0a,    5 /* Public */,
+       6,    1,   59,    2, 0x0a,    7 /* Public */,
+       7,    2,   62,    2, 0x0a,    9 /* Public */,
+      11,    1,   67,    2, 0x0a,   12 /* Public */,
 
  // slots: parameters
-    0x80000000 | 2, QMetaType::Int, QMetaType::Int, 0x80000000 | 6,    4,    5,    7,
-    QMetaType::Void, 0x80000000 | 6,    7,
+    QMetaType::Void, QMetaType::Bool,    3,
+    QMetaType::Void, QMetaType::Bool,    3,
+    QMetaType::Void, QMetaType::Bool,    3,
+    QMetaType::Void, QMetaType::Bool,    3,
+    0x80000000 | 8, QMetaType::Int, QMetaType::Int,    9,   10,
+    QMetaType::Void, QMetaType::Int,   12,
 
        0        // eod
 };
@@ -77,28 +90,14 @@ void view::ChessWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         auto *_t = static_cast<ChessWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: { Position _r = _t->selectedSquare((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QPushButton*>>(_a[3])));
+        case 0: _t->option1Toggled((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 1: _t->option2Toggled((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 2: _t->option3Toggled((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 3: _t->option4Toggled((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 4: { Position _r = _t->getSelectedPosition((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])));
             if (_a[0]) *reinterpret_cast< Position*>(_a[0]) = std::move(_r); }  break;
-        case 1: _t->pieceSelected((*reinterpret_cast< std::add_pointer_t<QPushButton*>>(_a[1]))); break;
+        case 5: _t->setMode((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
-        }
-    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        switch (_id) {
-        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 0:
-            switch (*reinterpret_cast<int*>(_a[1])) {
-            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-            case 2:
-                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QPushButton* >(); break;
-            }
-            break;
-        case 1:
-            switch (*reinterpret_cast<int*>(_a[1])) {
-            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-            case 0:
-                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QPushButton* >(); break;
-            }
-            break;
         }
     }
 }
@@ -111,7 +110,7 @@ const QMetaObject view::ChessWindow::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_view__ChessWindow_t
 , QtPrivate::TypeAndForceComplete<ChessWindow, std::true_type>
-, QtPrivate::TypeAndForceComplete<Position, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<QPushButton *, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QPushButton *, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>, QtPrivate::TypeAndForceComplete<Position, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>
 
 
 >,
@@ -138,13 +137,13 @@ int view::ChessWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
-            qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        if (_id < 6)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 6;
     }
     return _id;
 }
