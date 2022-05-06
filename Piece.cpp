@@ -1,4 +1,4 @@
-#include "Piece.h"
+#include "Piece.hpp"
 
 bool Piece::validateMove(Position& position)
 {
@@ -9,7 +9,6 @@ bool Piece::validateMove(Position& position)
 				(position.column == possiblePosition->column))
 				{
 					valid = true;
-					std::cout << "move is among the piece's possible positions" << std::endl;
 				}
 		}
 	return valid;
@@ -31,17 +30,5 @@ void Piece::addPossiblePosition(int newX, int newY)
 std::ostream& operator<< (std::ostream& os, const Piece& piece)
 {
 	piece.talk(os);
-	return os;
-}
-
-std::ostream& operator<< (std::ostream& os, const Square& square)
-{
-	os << "square at position (" << square.row_ << "," << square.column_ << ")";
-	
-	if (square.currentPiece != nullptr)
-		{
-			os << " with " << *square.currentPiece;
-		}
-	os << "\n";
 	return os;
 }

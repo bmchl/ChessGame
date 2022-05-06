@@ -1,4 +1,4 @@
-#include "TemporaryPiece.h"
+#include "TemporaryPiece.hpp"
 
 TemporaryPiece::~TemporaryPiece()
 {

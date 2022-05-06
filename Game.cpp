@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.hpp"
 
 void Game:: reset()
 {
@@ -11,41 +11,41 @@ void Game:: reset()
 bool Game:: isInCheck()
 {
 	for (auto pair : pieces)
+	{
+		if ((board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[k].row][pieces[k].column])) || (board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[K].row][pieces[K].column])))
 		{
-			if ((board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[k].row][pieces[k].column])) || (board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[K].row][pieces[K].column])))
-				{
-					return true;
-				}
+			return true;
 		}
+	}
 	return false;
 }
 bool Game:: isOver()
 {
 	if (k->isDead)
-		{
-			winner = "Black";
-			return true;
-		}
+	{
+		winner = "Black";
+		return true;
+	}
 	else if (K->isDead)
-		{
-			winner = "White";
-			return true;
-		}
+	{
+		winner = "White";
+		return true;
+	}
 	return false;
 }
 bool Game::isImpossibleMove(Position* currentPosition, Position* newPosition)
 {
 	if (board.squares[currentPosition->row][currentPosition->column]->currentPiece->color_ != turn)
+	{
+		return true;
+	}
+	else
+	{
+		if (not board.isValidMove(*board.squares[currentPosition->row][currentPosition->column], *board.squares[newPosition->row][newPosition->column]))
 		{
 			return true;
 		}
-	else
-		{
-			if (not board.isValidMove(*board.squares[currentPosition->row][currentPosition->column], *board.squares[newPosition->row][newPosition->column]))
-				{
-					return true;
-				}
-		}
+	}
 	return false;
 }
 void Game::makeMove(Position* currentPosition, Position* newPosition)

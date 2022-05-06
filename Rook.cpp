@@ -1,4 +1,4 @@
-#include "Rook.h"
+#include "Rook.hpp"
 
 void Rook::talk(std::ostream& os) const
 {

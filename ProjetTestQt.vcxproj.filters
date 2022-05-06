@@ -37,16 +37,64 @@
     <ClCompile Include="googletest\src\gtest-all.cc">
       <Filter>Sources Bibliotheques</Filter>
     </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="King.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Piece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TemporaryPiece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Chess.hpp">
+    <ClInclude Include="Board.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="King.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Piece.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Position.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="View.hpp">
+    <ClInclude Include="Rook.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Square.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TemporaryPiece.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Square.cpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessWindow.hpp">
+      <Filter>Vue</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessSquare.hpp">
+      <Filter>Vue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

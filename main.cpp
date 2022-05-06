@@ -1,8 +1,8 @@
 ﻿//TD6 INF 1015
 //Michael Banna (2147128) & Nour Zahreddine (2167661)
 //Le code principal qui contient les démonstrations des implémentations des points 2 et 3 du travail pratique.
-#include "Chess.hpp"
-#include "View.hpp"
+#include "Game.hpp"
+#include "ChessWindow.hpp"
 
 #include <QApplication>
 #include <iostream>
@@ -47,7 +47,7 @@ void initialiserBibliothequeCours([[maybe_unused]] int argc, [[maybe_unused]] ch
 using namespace std;
 using namespace iter;
 using namespace gsl;
-using namespace logic;
+//using namespace logic;
 using namespace view;
 
 int main(int argc, char *argv[])

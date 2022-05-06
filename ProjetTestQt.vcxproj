@@ -113,13 +113,29 @@
   <ItemGroup>
     <ClCompile Include="bibliotheque_cours\bibliotheque_cours.cpp" />
     <ClCompile Include="bibliotheque_cours\verification_allocation.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="googletest\src\gtest-all.cc" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Rook.cpp" />
+    <ClCompile Include="TemporaryPiece.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Chess.hpp" />
+    <ClInclude Include="Board.hpp" />
+    <ClInclude Include="ChessSquare.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="King.hpp" />
+    <ClInclude Include="Knight.hpp" />
+    <ClInclude Include="Square.cpp" />
+    <ClInclude Include="Piece.hpp" />
     <ClInclude Include="Position.hpp" />
-    <ClInclude Include="View.hpp" />
+    <ClInclude Include="Rook.hpp" />
+    <ClInclude Include="Square.hpp" />
+    <ClInclude Include="TemporaryPiece.hpp" />
+    <ClInclude Include="ChessWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="View.ui" />

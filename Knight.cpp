@@ -1,4 +1,4 @@
-#include "Knight.h"
+#include "Knight.hpp"
 
 void Knight::talk(std::ostream& os) const
 {

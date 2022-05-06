@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "Board.hpp"
 
 void Board::populate()
 {
@@ -29,21 +29,21 @@ bool Board::checkPositionOverlap(Square& currentPosition, Square& newPosition)
 void Board::setPosition(Square& currentPosition, Square& newPosition)
 {
 	if (isValidMove(currentPosition, newPosition))
-		{
-			if (newPosition.currentPiece != nullptr)
-				{
-					newPosition.currentPiece->isDead = true;
-					std::cout << *newPosition.currentPiece << " is dead" << std::endl;
-					newPosition.currentPiece = nullptr;
-				}
-			newPosition.currentPiece = move(currentPosition.currentPiece);
-			std::cout << "positions changed" << std::endl;
-			newPosition.currentPiece->possiblePositions.clear();
-		}
+	{
+		if (newPosition.currentPiece != nullptr)
+			{
+				newPosition.currentPiece->isDead = true;
+				//std::cout << *newPosition.currentPiece << " is dead" << std::endl;
+				newPosition.currentPiece = nullptr;
+			}
+		newPosition.currentPiece = move(currentPosition.currentPiece);
+		//std::cout << "positions changed" << std::endl;
+		newPosition.currentPiece->possiblePositions.clear();
+	}
 	else
-		{
-			std::cout << "invalid move" << std::endl;
-		}
+	{
+		std::cout << "invalid move" << std::endl;
+	}
 };
 
 void Board::placePiece(std::shared_ptr<Piece> piece, Position position)
@@ -56,11 +56,11 @@ bool Board::isValidMove(Square& currentPosition, Square& newPosition)
 	currentPosition.currentPiece->updatePossiblePositions(*currentPosition.position_);
 	currentPosition.currentPiece->possiblePositions.remove_if([this, &currentPosition](auto& pos)
 		{ return checkPositionOverlap(currentPosition, *squares[pos->row][pos->column]); });
-	std::cout << "possible positions:" << std::endl;
-	for (auto&& position : currentPosition.currentPiece->possiblePositions)
-		{
-			std::cout << *squares[position->row][position->column];
-		}
+	//std::cout << "possible positions:" << std::endl;
+	//for (auto&& position : currentPosition.currentPiece->possiblePositions)
+	//	{
+	//		//std::cout << *squares[position->row][position->column];
+	//	}
 	//TODO: verifier si parcours entre currentPosition et newPosition est libre
 	return currentPosition.currentPiece->validateMove(*newPosition.position_);
 }
