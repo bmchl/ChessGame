@@ -35,29 +35,42 @@
 QT_BEGIN_NAMESPACE
 namespace view
 {
+
+    class ChessSquare : public QPushButton
+    {
+    public:
+        ChessSquare(int x, int y, QWidget* parent = nullptr) : QPushButton(parent) 
+        { 
+            position = new Position{ x,y }; 
+        };
+        Position* position;
+
+    };
     class ChessWindow : public QMainWindow
     {
-    Q_OBJECT
     private:
         logic::Game* game_;
+        int selectedMode = 1;
+        int selectionCount = 0;
+        std::list<Position*> selectedPositions;
     public:
         QWidget* centralwidget;
         QWidget* gridLayoutWidget;
         QGridLayout* gridLayout;
         QDialog* dialog;
         QPushButton* chessSquares[8][8];
-
-        QWidget* horizontalLayoutWidget;
-        QHBoxLayout* pieceChoiceLayout;
-        QVBoxLayout* whitePieceChoiceLayout;
-        QPushButton* pieceChoice1;
-        QPushButton* pieceChoice2;
-        QPushButton* pieceChoice3;
-        QVBoxLayout* blackPieceChoiceLayout;
-        QPushButton* pieceChoice4;
-        QPushButton* pieceChoice5;
-        QPushButton* pieceChoice6;
-
+        QLabel* turnIndicator;
+        QLabel* checkIndicator;
+        ~ChessWindow()
+        {
+            //delete centralwidget;
+            //delete gridLayoutWidget;
+            //delete gridLayout;
+            //delete dialog;
+            //delete chessSquares;
+            //delete turnIndicator;
+            std::cout << "constructor called" << std::endl;
+        }
         ChessWindow(logic::Game* game, QWidget* parent = nullptr): game_(game)
         {
             this->resize(990, 770);
@@ -76,29 +89,185 @@ namespace view
             gridLayout->setContentsMargins(0, 0, 0, 0);
             gridLayout->setSpacing(0);
             this->setCentralWidget(centralwidget);
-            QMetaObject::connectSlotsByName(this);
+            //QMetaObject::connectSlotsByName(this);
             addSquares();
-            addPieceChoices();
+            addTurnIndicator();
+            addCheckIndicator();
+            displayStartOptions();
+            
+        }
+        void addSquares()
+        {
+            auto groupedSquares = new QButtonGroup(this);
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    chessSquares[i][j] = new ChessSquare(i, j, gridLayoutWidget);
+                    chessSquares[i][j]->setMaximumSize(QSize(80, 80));
+                    chessSquares[i][j]->setCheckable(false);
+                    gridLayout->addWidget(chessSquares[i][j], i, j, 1, 1);
+                    groupedSquares->addButton(chessSquares[i][j]);
+                }
+            }
+            QObject::connect(groupedSquares, &QButtonGroup::buttonClicked, this, &ChessWindow::rememberSelectedSquare);
+            stylizeRegularSquares();
+        }
+        void addTurnIndicator()
+        {
+            auto turnTitle = new QLabel(this);
+            turnTitle->setStyleSheet("color:white;font-size:15px");
+            turnTitle->setGeometry(30, 30, 100, 30);
+            turnTitle->setText("current turn:");
+            turnIndicator = new QLabel(this);
+            turnIndicator->setStyleSheet("color:white;font-size:30px");
+            turnIndicator->setGeometry(30, 60, 100, 30);
+            updateTurn();
+        }
+        void incrementSelectionCount()
+        {
+            std::cout << "incrementing count " << std::endl;
+            selectionCount++;
+            if (selectionCount == 2)
+            {
+                executeMove();
+                selectionCount = 0;
+            }
+        }
+        void executeMove()
+        {
+            if (game_->isImpossibleMove(*std::next(selectedPositions.begin(), 1), selectedPositions.front()))
+            {
+                displayInvalidMoveDialog();
+                stylizeRegularSquares();
+            }
+            else
+            {
+                updatePieces(*std::next(selectedPositions.begin(), 1), selectedPositions.front());
+                game_->makeMove(*std::next(selectedPositions.begin(), 1), selectedPositions.front());
+                updateTurn();
+                stylizeRegularSquares();
+                if (game_->isOver())
+                {
+                    displayGameOverDialog();
+                }
+            }
+            updateCheckStatus();
+        }
+        void updateCheckStatus()
+        {
+            if (game_->isInCheck())
+            {
+                checkIndicator->setText("check!");
+            }
+            else
+            {
+                checkIndicator->setText("");
+            }
+        }
+        void addCheckIndicator()
+        {
+            checkIndicator = new QLabel(this);
+            checkIndicator->setStyleSheet("color:white;font-size:50px");
+            checkIndicator->setGeometry(30, 610, 200, 60);
+            checkIndicator->setText("");
+            updateCheckStatus();
+        }
+        void displayGameOverDialog()
+    {
+            dialog = new QDialog();
+            dialog->setWindowTitle("game over!");
+            dialog->setFixedSize(500, 200);
+            auto winner = new QLabel(dialog);
+            winner->setText(game_->winner + " is the winner!");
+            winner->setGeometry(QRect(20, 50, 100, 30));
+            auto restartButton = new QPushButton(dialog);
+            restartButton->setText("restart");
+            restartButton->setGeometry(QRect(420, 150, 60, 20));
+            QObject::connect(restartButton, &QPushButton::clicked, dialog, &QDialog::accept);
+            dialog->exec();
+            exit();
+        }
+        void exit()
+        {
+            game_->reset();
+            selectionCount = 0;
+            selectedPositions.clear();
+            cleanBoard();
             displayStartOptions();
         }
-
-        void addSquares()
+        void cleanBoard()
         {
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    chessSquares[i][j] = new QPushButton(gridLayoutWidget);
-                    chessSquares[i][j]->setMaximumSize(QSize(80, 80));
-                    chessSquares[i][j]->setCheckable(false);
+                    chessSquares[i][j]->setIcon(QIcon(""));
+                }
+            }
+        }
+        void displayInvalidMoveDialog()
+        {
+            dialog = new QDialog();
+            dialog->setWindowTitle("invalid move error!");
+            dialog->setFixedSize(500, 200);
+            auto mbButton = new QPushButton(dialog);
+            mbButton->setText("my bad :(");
+            mbButton->setGeometry(QRect(400, 150, 60, 20));
+            QObject::connect(mbButton, &QPushButton::clicked, dialog, &QDialog::accept);
+            dialog->exec();
+        }
+        void updateTurn()
+        {
+            if (game_->turn == 'W') { game_->turn = 'B'; }
+            else if (game_->turn == 'B') { game_->turn = 'W'; }
+
+            if (game_->turn == 'W')
+            {
+                turnIndicator->setText(QString("White"));
+            }
+            else if (game_->turn == 'B')
+            {
+                turnIndicator->setText(QString("Black"));
+            }
+        }
+        void updatePieces(Position* source, Position* destination)
+        {
+            for (auto pair : game_->pieces)
+            {
+                if (pair.second.row == source->row && pair.second.column == source->column)
+                {
+                    game_->pieces[pair.first] = *selectedPositions.front();
+                }
+            }
+           if (game_->getPiece(*destination) != nullptr && !game_->isImpossibleMove(*std::next(selectedPositions.begin(), 1), selectedPositions.front()))
+            {
+               game_->pieces.erase(game_->getPiece(*destination));
+            }
+            chessSquares[destination->row][destination->column]->setIcon(QIcon(""));
+            chessSquares[source->row][source->column]->setIcon(QIcon(""));
+            displayPieces();
+        }
+        void displayPieces()
+        {
+            for (auto piece : game_->pieces)
+            {
+                chessSquares[piece.second.row][piece.second.column]->setIcon(QIcon(piece.first->iconPath));
+                chessSquares[piece.second.row][piece.second.column]->setIconSize(QSize(60, 60));
+            }
+        }
+        void stylizeRegularSquares()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
                     if ((i + j) % 2 == 0) {
                         chessSquares[i][j]->setStyleSheet("background-color:rgb(159,179,159)");
                     }
                     else {
                         chessSquares[i][j]->setStyleSheet("background-color:rgb(106,128,120)");
                     }
-                    gridLayout->addWidget(chessSquares[i][j], i, j, 1, 1);
-                    //QObject::connect(chessSquares[i][j],)
                 }
             }
             chessSquares[0][0]->setStyleSheet("background-color:rgb(159,179,159); border-top-left-radius: 10");
@@ -106,201 +275,179 @@ namespace view
             chessSquares[0][7]->setStyleSheet("background-color:rgb(106,128,120); border-top-right-radius: 10");
             chessSquares[7][0]->setStyleSheet("background-color:rgb(106,128,120); border-bottom-left-radius: 10");
         }
-
-        void addPieceChoices()
+        void highlightPossiblePositions(std::shared_ptr<logic::Piece> piece)
         {
-            horizontalLayoutWidget = new QWidget(centralwidget);
-            horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-            horizontalLayoutWidget->setGeometry(QRect(20, 110, 172, 256));
-            pieceChoiceLayout = new QHBoxLayout(horizontalLayoutWidget);
-            pieceChoiceLayout->setObjectName(QString::fromUtf8("pieceChoiceLayout"));
-            pieceChoiceLayout->setContentsMargins(0, 0, 0, 0);
-            whitePieceChoiceLayout = new QVBoxLayout();
-            whitePieceChoiceLayout->setObjectName(QString::fromUtf8("whitePieceChoiceLayout"));
-            pieceChoice1 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice1->setObjectName(QString::fromUtf8("pieceChoice1"));
-            pieceChoice1->setFixedSize(QSize(80, 80));
-            pieceChoice1->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice1->setCheckable(false);
-            pieceChoice1->setIcon(QIcon("./img/wking.png"));
-            pieceChoice1->setIconSize(QSize(60, 60));
-
-            whitePieceChoiceLayout->addWidget(pieceChoice1);
-
-            pieceChoice2 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice2->setObjectName(QString::fromUtf8("pieceChoice2"));
-            pieceChoice2->setMinimumSize(QSize(80, 80));
-            pieceChoice2->setMaximumSize(QSize(80, 80));
-            pieceChoice2->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice2->setCheckable(false);
-            pieceChoice2->setIcon(QIcon("./img/wknight.png"));
-            pieceChoice2->setIconSize(QSize(60, 60));
-
-            whitePieceChoiceLayout->addWidget(pieceChoice2);
-
-            pieceChoice3 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice3->setObjectName(QString::fromUtf8("pieceChoice3"));
-            pieceChoice3->setMinimumSize(QSize(80, 80));
-            pieceChoice3->setMaximumSize(QSize(80, 80));
-            pieceChoice3->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice3->setCheckable(false);
-            pieceChoice3->setIcon(QIcon("./img/wrook.png"));
-            pieceChoice3->setIconSize(QSize(60, 60));
-
-            whitePieceChoiceLayout->addWidget(pieceChoice3);
-
-
-            pieceChoiceLayout->addLayout(whitePieceChoiceLayout);
-
-            blackPieceChoiceLayout = new QVBoxLayout();
-            blackPieceChoiceLayout->setObjectName(QString::fromUtf8("blackPieceChoiceLayout"));
-            pieceChoice4 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice4->setObjectName(QString::fromUtf8("pieceChoice4"));
-            pieceChoice4->setMinimumSize(QSize(80, 80));
-            pieceChoice4->setMaximumSize(QSize(80, 80));
-            pieceChoice4->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice4->setCheckable(false);
-            pieceChoice4->setIcon(QIcon("./img/bking.png"));
-            pieceChoice4->setIconSize(QSize(60, 60));
-
-            blackPieceChoiceLayout->addWidget(pieceChoice4);
-
-            pieceChoice5 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice5->setObjectName(QString::fromUtf8("pieceChoice5"));
-            pieceChoice5->setMinimumSize(QSize(80, 80));
-            pieceChoice5->setMaximumSize(QSize(80, 80));
-            pieceChoice5->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice5->setCheckable(false);
-            pieceChoice5->setIcon(QIcon("./img/bknight.png"));
-            pieceChoice5->setIconSize(QSize(60, 60));
-
-            blackPieceChoiceLayout->addWidget(pieceChoice5);
-
-            pieceChoice6 = new QPushButton(horizontalLayoutWidget);
-            pieceChoice6->setObjectName(QString::fromUtf8("pieceChoice6"));
-            pieceChoice6->setMinimumSize(QSize(80, 80));
-            pieceChoice6->setMaximumSize(QSize(80, 80));
-            pieceChoice6->setStyleSheet("background-color:rgb(20,20,20);border-radius:20");
-            pieceChoice6->setCheckable(false);
-            pieceChoice6->setIcon(QIcon("./img/brook.png"));
-            pieceChoice6->setIconSize(QSize(60, 60));
-
-            blackPieceChoiceLayout->addWidget(pieceChoice6);
-
-            pieceChoiceLayout->addLayout(blackPieceChoiceLayout);
+            stylizeRegularSquares();
+            piece->updatePossiblePositions(game_->getPosition(piece));
+            for (auto&& possiblePosition : piece->possiblePositions)
+            {
+                if (possiblePosition->row == 0 && possiblePosition->column == 0)
+                {
+                    chessSquares[0][0]->setStyleSheet("background-color:rgb(202,182,109); border-top-left-radius: 10");
+                }
+                else if (possiblePosition->row == 7 && possiblePosition->column == 7)
+                {
+                    chessSquares[7][7]->setStyleSheet("background-color:rgb(202,182,109); border-bottom-right-radius: 10");
+                }
+                else if (possiblePosition->row == 0 && possiblePosition->column == 7)
+                {
+                    chessSquares[0][7]->setStyleSheet("background-color:rgb(202,182,109); border-top-right-radius: 10");
+                }
+                else if (possiblePosition->row == 7 && possiblePosition->column == 0)
+                {
+                    chessSquares[7][0]->setStyleSheet("background-color:rgb(202,182,109); border-bottom-left-radius: 10");
+                }
+                else 
+                {
+                    chessSquares[possiblePosition->row][possiblePosition->column]->setStyleSheet("background-color:rgb(202,182,109)");
+                }
+            }
         }
         void displayStartOptions()
         {
             dialog = new QDialog();
-            //dialog->setStyleSheet("background-color:rgb(30,30,30)");
+            dialog->setStyleSheet("background-color:rgb(30,30,30)");
             dialog->setWindowTitle("choix de fin de jeu");
 
             dialog->setFixedSize(500, 600);
-            auto buttonBox = new QDialogButtonBox(dialog);
-            buttonBox->setGeometry(QRect(40, 530, 420, 30));
-            buttonBox->setOrientation(Qt::Horizontal);
-            buttonBox->setStandardButtons(QDialogButtonBox::Ok);
-            //QObject::connect(buttonBox, buttonBox->accepted(), this, setMode(selectedMode));
-            QObject::connect(buttonBox, SIGNAL(&QDialogButtonBox::accepted), dialog, SLOT(&QDialog::accept));
+          
+            auto playButton = new QPushButton(dialog);
+            playButton->setText("play now!");
+            playButton->setStyleSheet("color:white; background-color:rgb(60,60,60)");
+            playButton->setGeometry(QRect(20, 550, 460, 30));
+            QObject::connect(playButton, &QPushButton::clicked, dialog, &QDialog::accept);
 
             auto groupBox = new QGroupBox(dialog);
-            groupBox->setGeometry(QRect(20, 20, 460, 560));
+            groupBox->setGeometry(QRect(20, 20, 460, 520));
             groupBox->setTitle("choisissez une des options suivantes:");
+            groupBox->setStyleSheet("color:white");
+
 
             auto radioButton = new QRadioButton(groupBox);
             radioButton->setGeometry(QRect(20, 220, 80, 20));
             radioButton->setText("option 1");
             radioButton->setChecked(true);
-            QObject::connect(radioButton, SIGNAL(toggled(bool)), this, SLOT(option1Toggled(bool checked)));
+            radioButton->setStyleSheet("color:white");
+
+            QObject::connect(radioButton, &QRadioButton::toggled, this, &ChessWindow::option1Toggled);
 
             auto radioButton_2 = new QRadioButton(groupBox);
             radioButton_2->setGeometry(QRect(240, 220, 80, 20));
             radioButton_2->setText("option 2");
-            QObject::connect(radioButton_2, SIGNAL(toggled(bool)), this, SLOT(view::ChessWindow::option2Toggled(bool checked)));
+            radioButton_2->setStyleSheet("color:white");
+            QObject::connect(radioButton_2, &QRadioButton::toggled, this, &ChessWindow::option2Toggled);
 
             auto radioButton_3 = new QRadioButton(groupBox);
             radioButton_3->setGeometry(QRect(20, 480, 80, 20));
             radioButton_3->setText("option 3");
-            QObject::connect(radioButton_3, SIGNAL(toggled(bool)), this, SLOT(option3Toggled(bool checked)));
+            radioButton_3->setStyleSheet("color:white");
+            QObject::connect(radioButton_3, &QRadioButton::toggled, this, &ChessWindow::option3Toggled);
 
             auto radioButton_4 = new QRadioButton(groupBox);
             radioButton_4->setGeometry(QRect(240, 480, 80, 20));
             radioButton_4->setText("option 4");
-            QObject::connect(radioButton_4, SIGNAL(toggled(bool)), this, SLOT(option4Toggled(bool checked)));
+            radioButton_4->setStyleSheet("color:white");
+            QObject::connect(radioButton_4, &QRadioButton::toggled, this, &ChessWindow::option4Toggled);
 
             auto label = new QLabel(groupBox);
             label->setObjectName(QString::fromUtf8("label"));
             label->setGeometry(QRect(20, 20, 200, 200));
-            label->setPixmap(QPixmap("../../../../../../Users/banna/OneDrive - polymtl.ca/inf1500 docs folder from oct 20th/test ual comptage de 5.PNG"));
+            label->setPixmap(QPixmap("./img/option1preview"));
+            label->setScaledContents(true);
+            label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
             auto label_2 = new QLabel(groupBox);
             label_2->setGeometry(QRect(240, 20, 200, 200));
-            label_2->setPixmap(QPixmap("../../../../../../Users/banna/OneDrive - polymtl.ca/inf1500 docs folder from oct 20th/test ual comptage de 5.PNG"));
+            label_2->setPixmap(QPixmap("./img/option2preview"));
+            label_2->setScaledContents(true);
+            label_2->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
             auto label_3 = new QLabel(groupBox);
             label_3->setGeometry(QRect(240, 280, 200, 200));
-            label_3->setPixmap(QPixmap("../../../../../../Users/banna/OneDrive - polymtl.ca/inf1500 docs folder from oct 20th/test ual comptage de 5.PNG"));
+            label_3->setPixmap(QPixmap("./img/option3preview"));
+            label_3->setScaledContents(true);
+            label_3->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
             auto label_4 = new QLabel(groupBox);
             label_4->setGeometry(QRect(20, 280, 200, 200));
-            label_4->setPixmap(QPixmap("../../../../../../Users/banna/OneDrive - polymtl.ca/inf1500 docs folder from oct 20th/test ual comptage de 5.PNG"));
-
-            //QObject::connect(this, SIGNAL(optionsGroup->clicked(int)), this, SLOT(setMode(selectedMode)));
+            label_4->setPixmap(QPixmap("./img/option4preview"));
+            label_4->setScaledContents(true);
+            label_4->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
             dialog->exec();
-            //dialog->open();
-            setMode(dialog->result());
+            setMode();
+        }
+        void setMode()
+        {
+            switch (selectedMode)
+            {
+            case 1:
+                std::cout << "option 1 selected" << std::endl;
+                game_->setOption1();
+                displayPieces();
+                break;
+            case 2:
+                std::cout << "option 2 selected" << std::endl;
+                game_->setOption2();
+                displayPieces();
+                break;
+            case 3:
+                std::cout << "option 3 selected" << std::endl;
+                game_->setOption3();
+                displayPieces();
+                break;
+            case 4:
+                std::cout << "option 4 selected" << std::endl;
+                game_->setOption4();
+                displayPieces();
+                break;
+            }
         }
      public slots:
+         void rememberSelectedSquare(QAbstractButton* button)
+         {
+             auto square = static_cast<ChessSquare*>(button);
+             selectedPositions.push_front(square->position);
+             std::cout << "remembered selected square at (" << selectedPositions.front()->row << "," << selectedPositions.front()->column << ")";
+             if (selectionCount == 0 && game_->getPiece(*selectedPositions.front()) != nullptr)
+             {
+                 std::cout << " with " << *game_->getPiece(*selectedPositions.front());
+                 highlightPossiblePositions(game_->getPiece(*selectedPositions.front()));
+                 incrementSelectionCount();
+             }
+             else if(selectionCount > 0)
+             {
+                 incrementSelectionCount();
+             }
+             std::cout << std::endl;
+         }
          void option1Toggled(bool checked)
          {
              if (checked)
              {
-                 dialog->setResult(1);
+                 selectedMode = 1;
              }
          }
          void option2Toggled(bool checked)
          {
              if (checked)
              {
-                 dialog->setResult(2);
+                 selectedMode = 2;
              }
          }
          void option3Toggled(bool checked)
          {
              if (checked)
              {
-                 dialog->setResult(3);
+                 selectedMode = 3;
              }
          }
          void option4Toggled(bool checked)
          {
              if (checked)
              {
-                 dialog->setResult(4);
+                 selectedMode = 4;
              }
          }
-        Position getSelectedPosition(int x, int y)
-        {
-            return Position{ x,y };
-        };
-        void setMode(int mode)
-        {
-            switch (mode)
-            {
-            case 1:
-                std::cout << "option 1 selected" << std::endl;
-                break;
-            case 2:
-                std::cout << "option 2 selected" << std::endl;
-                break;
-            case 3:
-                std::cout << "option 3 selected" << std::endl;
-                break;
-            case 4:
-                std::cout << "option 4 selected" << std::endl;
-                break;
-            }
-        }
     };
 
 }

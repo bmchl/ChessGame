@@ -119,7 +119,7 @@
   <ItemGroup>
     <ClInclude Include="Chess.hpp" />
     <ClInclude Include="Position.hpp" />
-    <QtMoc Include="View.hpp" />
+    <ClInclude Include="View.hpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="View.ui" />

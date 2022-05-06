@@ -19,6 +19,7 @@
 
 #pragma warning(push, 0) // Sinon Qt fait des avertissements à /W4.
 #include <QObject>
+#include <QString>
 #pragma pop()
 
 namespace logic {
@@ -52,6 +53,8 @@ namespace logic {
 	public:
 		Piece() = default;
 		virtual ~Piece() = default;
+		QString iconPath = "";
+		virtual void setIconPath() {};
 		Piece(char color) : color_(color) {};
 		/*Piece(Square& square, char color) : color_(color)
 		{
@@ -163,9 +166,7 @@ namespace logic {
 					std::cout << *newPosition.currentPiece << " is dead" << std::endl;
 					newPosition.currentPiece = nullptr;
 				}
-				//currentPosition.currentPiece->assignToSquare(newPosition);
 				newPosition.currentPiece = move(currentPosition.currentPiece);
-				//currentPosition.currentPiece = nullptr;
 				std::cout << "positions changed" << std::endl;
 				newPosition.currentPiece->possiblePositions.clear();
 			}
@@ -209,13 +210,14 @@ namespace logic {
 	class King : public Piece
 	{
 	public:
-		King() = default;
+		//King() = default;
 		//King(char color) : Piece(color)
 		//{
 
 		//}
 		King(char color) : Piece( color)
 		{
+			setIconPath();
 			if (instanceCount_ >= 2)
 			{
 				throw KingInstanceException("max instances reached\n");
@@ -241,7 +243,7 @@ namespace logic {
 
 		void updatePossiblePositions(Position& currentPosition) override
 		{
-			addPossiblePosition(currentPosition.row, currentPosition.column);
+			//addPossiblePosition(currentPosition.row, currentPosition.column);
 			addPossiblePosition(currentPosition.row + 1, currentPosition.column);
 			addPossiblePosition(currentPosition.row - 1, currentPosition.column);
 			addPossiblePosition(currentPosition.row, currentPosition.column + 1);
@@ -255,6 +257,17 @@ namespace logic {
 		{
 			os << "king (" << color_ << ")";
 		}
+		void setIconPath() override
+		{
+			if (color_ == 'W')
+			{
+				iconPath = "./img/wking.png";
+			}
+			else if (color_ == 'B')
+			{
+				iconPath = "./img/bking.png";
+			}
+		}
 
 	private:
 		inline static int instanceCount_ = 0;
@@ -263,11 +276,11 @@ namespace logic {
 	class Rook : public Piece
 	{
 	public:
-		Rook(char color) :Piece(color) {};
+		Rook(char color) :Piece(color) { setIconPath(); };
 
 		void updatePossiblePositions(Position& currentPosition) override
 		{
-			for (int i = 1; i < 7; i++)
+			for (int i = 1; i < 8; i++)
 			{
 				addPossiblePosition(currentPosition.row, currentPosition.column + i);
 				addPossiblePosition(currentPosition.row, currentPosition.column - i);
@@ -279,14 +292,24 @@ namespace logic {
 		{
 			os << "rook  (" << color_ << ")";
 		}
-
+		void setIconPath() override
+		{
+			if (color_ == 'W')
+			{
+				iconPath = "./img/wrook.png";
+			}
+			else if (color_ == 'B')
+			{
+				iconPath = "./img/brook.png";
+			}
+		}
 	private:
 	};
 
 	class Knight : public Piece
 	{
 	public:
-		Knight(char color) : Piece(color) {};
+		Knight(char color) : Piece(color) { setIconPath(); };
 
 		void updatePossiblePositions(Position& currentPosition) override
 		{
@@ -305,8 +328,18 @@ namespace logic {
 		{
 			os << "knight (" << color_ << ")";
 		}
+		void setIconPath() override
+		{
+			if (color_ == 'W')
+			{
+				iconPath = "./img/wknight.png";
+			}
+			else if (color_ == 'B')
+			{
+				iconPath = "./img/bknight.png";
+			}
+		}
 	private:
-		
 	};
 
 	//class Player
@@ -357,19 +390,16 @@ namespace logic {
 		Square& position_;
 	};
 
-	class Game//: public QObject
+	class Game
 	{
-		//Q_OBJECT
 	private:
 		Board board;
 
 		//Player p1;
 		//Player p2;
 
-		King k;
-		King K;
-
-		std::vector<Piece> pieces;
+		std::shared_ptr<King> k = nullptr;
+		std::shared_ptr<King> K = nullptr;
 
 	/*signals:
 		void changePosition(Position& start, Position& end) {};
@@ -390,7 +420,26 @@ namespace logic {
 			}
 		}*/
 	public:
+		std::map<std::shared_ptr<Piece>, Position> pieces;
 		char turn = 'B';
+
+		QString winner = "";
+
+		std::shared_ptr<Piece> getPiece(Position& position)
+		{
+			return board.squares[position.row][position.column]->currentPiece;
+		}
+		Position& getPosition(std::shared_ptr<Piece> piece)
+		{
+			return pieces[piece];
+		}
+		void reset()
+		{
+			k = nullptr;
+			K = nullptr;
+			pieces.clear();
+			board = Board();
+		}
 		Game()
 		{
 			board = Board();
@@ -398,81 +447,224 @@ namespace logic {
 			//p2 = Player(board, 'B');
 			//initializePieces();
 		}
-		void makeMove(Square& currentPosition, Square& newPosition)
+		bool isInCheck()
 		{
-			std::cout << "verifying correct move" << std::endl;
-			std::cout << "my color is: " << turn << std::endl;
-			std::cout << "the piece's color is: " << currentPosition.currentPiece->color_ << std::endl;
-			if (currentPosition.currentPiece->color_ == turn)
+			for (auto pair : pieces)
 			{
-				std::cout << "right color" << std::endl;
-				board.setPosition(currentPosition, newPosition);
+				if ((board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[k].row][pieces[k].column])) || (board.isValidMove(*board.squares[pair.second.row][pair.second.column], *board.squares[pieces[K].row][pieces[K].column])))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		bool isOver()
+		{
+			if (k->isDead)
+			{
+				winner = "Black";
+				return true;
+			}
+			else if (K->isDead)
+			{
+				winner = "White";
+				return true;
+			}
+			return false;
+		}
+		bool isImpossibleMove(Position* currentPosition, Position* newPosition)
+		{
+			if (board.squares[currentPosition->row][currentPosition->column]->currentPiece->color_ != turn)
+			{
+				return true;
 			}
 			else
 			{
-				std::cout << "wrong color" << std::endl;
+				if (not board.isValidMove(*board.squares[currentPosition->row][currentPosition->column], *board.squares[newPosition->row][newPosition->column]))
+				{
+					return true;
+				}
 			}
+			return false;
+		}
+		void makeMove(Position* currentPosition, Position* newPosition)
+		{
+			board.setPosition(*board.squares[currentPosition->row][currentPosition->column], *board.squares[newPosition->row][newPosition->column]);
+			//::cout << "attempting move from position (" << currentPosition->row << "," << currentPosition->column << ") to (" << newPosition->row << "," << newPosition->column << ")" << std::endl;
+			/*std::cout << "verifying correct move" << std::endl;
+			std::cout << "my color is: " << turn << std::endl;
+			std::cout << "the piece's color is: " << board.squares[currentPosition->row][currentPosition->column]->currentPiece->color_ << std::endl;*/
+			//if (board.squares[currentPosition->row][currentPosition->column]->currentPiece->color_ == turn)
+			//{
+			//	//std::cout << "right color" << std::endl;
+			//	
+			//}
+			//else
+			//{
+			//	//std::cout << "wrong color" << std::endl;
+			//}
 		}
 		void initializePieces()
 		{
-			k = King('W');
-			board.placePiece(std::make_shared<King>(k), Position{ 0,3 });
-			K = King('B');
-			board.placePiece(std::make_shared<King>(K), Position{7,3});
+			k = std::make_shared<King>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(k, Position{ 0,3 }));
+			board.placePiece(k, pieces[k]);
+
+			K = std::make_shared<King>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(K, Position{ 7,3 }));
+			board.placePiece(K, pieces[K]);
 		}
-		void play()
+		void setOption1()
 		{
-			bool gameOver = false;
+			k = std::make_shared<King>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(k, Position{ 3,2 }));
+			board.placePiece(k, pieces[k]);
 
-			int currentRow = 0;
-			int currentColumn = 0;
-			int newRow = 0;
-			int newColumn = 0;
+			K = std::make_shared<King>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(K, Position{ 3,0 }));
+			board.placePiece(K, pieces[K]);
 
-			std::cout << "game start" << std::endl;
-			std::cout << "here are the current pieces on the board:" << std::endl;
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
-				{
-					if (board.squares[i][j]->currentPiece != nullptr)
-					{
-						std::cout << *board.squares[i][j];
-					}
-				}
-			}
-			while (!gameOver)
-			{
-				if ((k.isDead) || (K.isDead))
-				{
-					gameOver = true;
-					break;
-				}
-				if (turn == 'W') { turn = 'B'; }
-				else if (turn == 'B') { turn = 'W'; }
-				std::cout << "current turn: " << turn << std::endl;
-				if (turn == 'W') 
-				{ 
-					std::cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
-					std::cin >> currentRow;
-					std::cin >> currentColumn;
-					std::cout << "player 1: pick a destination location\n";
-					std::cin >> newRow;
-					std::cin >> newColumn;
-					makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
-				}
-				else if (turn == 'B')
-				{
-					std::cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
-					std::cin >> currentRow;
-					std::cin >> currentColumn;
-					std::cout << "player 2: pick a destination location\n";
-					std::cin >> newRow;
-					std::cin >> newColumn;
-					makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
-				}
-			}
-			std::cout << "game over";
+			auto N = std::make_shared<Knight>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(N, Position{ 1,0 }));
+			board.placePiece(N, pieces[N]);
+			std::cout << "created knight" << std::endl;
+
+			auto r = std::make_shared<Rook>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(r, Position{0,1}));
+			board.placePiece(r, pieces[r]);
+			std::cout << "created rook" << std::endl;
 		}
+		void setOption2()
+		{
+			k = std::make_shared<King>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(k, Position{ 2,4 }));
+			board.placePiece(k, pieces[k]);
+
+			K = std::make_shared<King>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(K, Position{ 5,7 }));
+			board.placePiece(K, pieces[K]);
+
+			auto N = std::make_shared<Knight>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(N, Position{ 2,1 }));
+			board.placePiece(N, pieces[N]);
+			std::cout << "created knight" << std::endl;
+
+			auto r = std::make_shared<Rook>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(r, Position{ 1,5 }));
+			board.placePiece(r, pieces[r]);
+			std::cout << "created rook" << std::endl;
+		}
+		void setOption3()
+		{
+			k = std::make_shared<King>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(k, Position{ 4,7 }));
+			board.placePiece(k, pieces[k]);
+
+			K = std::make_shared<King>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(K, Position{ 5,5 }));
+			board.placePiece(K, pieces[K]);
+
+			auto N = std::make_shared<Knight>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(N, Position{ 6,4 }));
+			board.placePiece(N, pieces[N]);
+			std::cout << "created knight" << std::endl;
+
+			auto r = std::make_shared<Rook>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(r, Position{ 0,4 }));
+			board.placePiece(r, pieces[r]);
+			std::cout << "created rook" << std::endl;
+
+			auto R = std::make_shared<Rook>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(R, Position{ 7,6 }));
+			board.placePiece(R, pieces[R]);
+			std::cout << "created rook" << std::endl;
+		}
+		void setOption4()
+		{
+			k = std::make_shared<King>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(k, Position{ 4,3 }));
+			board.placePiece(k, pieces[k]);
+
+			K = std::make_shared<King>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(K, Position{ 2,3 }));
+			board.placePiece(K, pieces[K]);
+
+			auto N = std::make_shared<Knight>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(N, Position{ 1,3 }));
+			board.placePiece(N, pieces[N]);
+			std::cout << "created knight" << std::endl;
+
+			auto r = std::make_shared<Rook>('W');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(r, Position{ 6,1 }));
+			board.placePiece(r, pieces[r]);
+			std::cout << "created rook" << std::endl;
+
+			auto R = std::make_shared<Rook>('B');
+			pieces.insert(std::pair<std::shared_ptr<Piece>, Position>(R, Position{ 1,0 }));
+			board.placePiece(R, pieces[R]);
+			std::cout << "created rook" << std::endl;
+		}
+		//void play()
+		//{
+		//	bool gameOver = false;
+		//	std::cout << "game start" << std::endl;
+		//	std::cout << "here are the current pieces on the board:" << std::endl;
+		//	for (int i = 0; i < 8; i++)
+		//	{
+		//		for (int j = 0; j < 8; j++)
+		//		{
+		//			if (board.squares[i][j]->currentPiece != nullptr)
+		//			{
+		//				std::cout << *board.squares[i][j];
+		//			}
+		//		}
+		//	}
+		//	while (!gameOver)
+		//	{
+		//		if ((k->isDead) || (K->isDead))
+		//		{
+		//			gameOver = true;
+		//			break;
+		//		}
+		//		if (turn == 'W') { turn = 'B'; }
+		//		else if (turn == 'B') { turn = 'W'; }
+		//		std::cout << "current turn: " << turn << std::endl;
+		//		if (turn == 'W') 
+		//		{ 
+		//			//std::cout << "player 1: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n"; 
+		//			//std::cin >> currentRow;
+		//			//std::cin >> currentColumn;
+		//			//std::cout << "player 1: pick a destination location\n";
+		//			//std::cin >> newRow;
+		//			//std::cin >> newColumn;
+		//			while (currentRow == 8 || currentColumn == 8 || newRow == 8 || newColumn == 8)
+		//			{
+		//			}
+		//			makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
+		//			currentRow = 8;
+		//			currentColumn = 8;
+		//			newRow = 8;
+		//			newColumn = 8;
+		//		}
+		//		else if (turn == 'B')
+		//		{
+		//			//std::cout << "player 2: your turn. \nselect a piece on the board to move, one coordinate at a time \nexample, to access the piece at (3,0): \n 3 \n 0\n\n";
+		//			//std::cin >> currentRow;
+		//			//std::cin >> currentColumn;
+		//			//std::cout << "player 2: pick a destination location\n";
+		//			//std::cin >> newRow;
+		//			//std::cin >> newColumn;
+		//			while (currentRow == 8 || currentColumn == 8 || newRow == 8 || newColumn == 8)
+		//			{
+		//			}
+		//			makeMove(*board.squares[currentRow][currentColumn], *board.squares[newRow][newColumn]);
+		//			currentRow = 8;
+		//			currentColumn = 8;
+		//			newRow = 8;
+		//			newColumn = 8;
+		//		}
+		//	}
+		//	std::cout << "game over";
+		//}
 	};
 }

@@ -103,10 +103,8 @@ int main(int argc, char *argv[])
 	//cout << "the current number of instances of king is: " << k.getCount() << endl;
 	//// On retrouve nos 2 instances de King. Ce code s'execute malgré le fait qu'on rencontre une exception.
 	Game* game = new Game;
-	ChessWindow chessWindow(game);
-	chessWindow.show();
+	auto chessWindow = make_unique<ChessWindow>(game);
+	chessWindow->show();
 	return app.exec();
-	//delete game;
-	return 0;
 }
    
