@@ -50,21 +50,8 @@ public:
 		addPossiblePosition(currentPosition.row + 1, currentPosition.column - 1);
 		addPossiblePosition(currentPosition.row - 1, currentPosition.column + 1);
 	};
-	void talk(std::ostream& os) const override
-	{
-		os << "king (" << color_ << ")";
-	}
-	void setIconPath() override
-	{
-		if (color_ == 'W')
-			{
-				iconPath = "./img/wking.png";
-			}
-		else if (color_ == 'B')
-			{
-				iconPath = "./img/bking.png";
-			}
-	}
+	void talk(std::ostream& os) const override;
+	void setIconPath() override;
 	
 private:
 	inline static int instanceCount_ = 0;

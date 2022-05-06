@@ -17,14 +17,9 @@ public:
 	{
 		//piece_.assignToSquare(position_);
 	};
-	~TemporaryPiece()
-	{
-		piece_.isDead = true;
-		position_.currentPiece = nullptr;
-		//piece_.~Piece();
-	};
+	~TemporaryPiece();
 	Piece get() { return piece_; };
-	operator Piece() { return get(); };
+	operator Piece();
 	
 private:
 	Piece& piece_;

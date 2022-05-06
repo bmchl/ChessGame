@@ -29,20 +29,7 @@ public:
 		addPossiblePosition(currentPosition.row - 2, currentPosition.column + 1);
 	};
 	
-	void talk(std::ostream& os) const override
-	{
-		os << "knight (" << color_ << ")";
-	}
-	void setIconPath() override
-	{
-		if (color_ == 'W')
-			{
-				iconPath = "./img/wknight.png";
-			}
-		else if (color_ == 'B')
-			{
-				iconPath = "./img/bknight.png";
-			}
-	}
+	void talk(std::ostream& os) const override;
+	void setIconPath() override;
 private:
 };
