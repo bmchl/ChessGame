@@ -156,6 +156,95 @@ namespace logic {
 			}
 			return false;
 		}
+		void checkObstructedPaths(Square& currentPosition, Square& newPosition)
+		{
+			auto source = currentPosition.position_;
+			for (auto destination : currentPosition.currentPiece->possiblePositions)
+			{
+				if (destination->row == source->row && destination->column > source->column)
+				{
+					//mouvement vers la droite
+					for (int i = source->row; i <= 7; i++)
+					{
+						if (squares[i][source->column]->currentPiece != nullptr)
+						{
+							if (squares[i][source->column]->currentPiece->color_ != currentPosition.currentPiece->color_)
+							{
+								for (int j = i+1; j <= 7; j++)
+								{
+									for (auto pos : currentPosition.currentPiece->possiblePositions)
+									{
+										if (pos->row == j && pos->column == source->column)
+										{
+											currentPosition.currentPiece->possiblePositions.remove(pos);
+										}
+									}
+								}
+							}
+							else if (squares[i][source->column]->currentPiece->color_ == currentPosition.currentPiece->color_)
+							{
+								for (int j = i; j <= 7; j++)
+								{
+									for (auto pos : currentPosition.currentPiece->possiblePositions)
+									{
+										if (pos->row == j && pos->column == source->column)
+										{
+											currentPosition.currentPiece->possiblePositions.remove(pos);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (destination->row == source->row && destination->column < source->column)
+				{
+					//mouvement vers la gauche
+					for (int i = source->row; i >= 0; i--)
+					{
+						if (squares[i][source->column]->currentPiece != nullptr)
+						{
+							if (squares[i][source->column]->currentPiece->color_ != currentPosition.currentPiece->color_)
+							{
+								for (int j = i - 1; j >= 0; j--)
+								{
+									for (auto pos : currentPosition.currentPiece->possiblePositions)
+									{
+										if (pos->row == j && pos->column == source->column)
+										{
+											currentPosition.currentPiece->possiblePositions.remove(pos);
+										}
+									}
+								}
+							}
+							else if (squares[i][source->column]->currentPiece->color_ == currentPosition.currentPiece->color_)
+							{
+								for (int j = i; j >= 0; j--)
+								{
+									for (auto pos : currentPosition.currentPiece->possiblePositions)
+									{
+										if (pos->row == j && pos->column == source->column)
+										{
+											currentPosition.currentPiece->possiblePositions.remove(pos);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				else if (destination->row > source->row && destination->column == source->column)
+				{
+					//mouvement vers le bas
+
+				}
+				else if (destination->row == source->row && destination->column > source->column)
+				{
+					//mouvement vers le haut
+
+				}
+			}
+		}
 		void setPosition(Square& currentPosition, Square& newPosition)
 		{
 			if (isValidMove(currentPosition, newPosition))
@@ -288,6 +377,7 @@ namespace logic {
 				addPossiblePosition(currentPosition.row - i, currentPosition.column);
 			}
 		};
+		bool isRook = true;
 		void talk(std::ostream& os) const override
 		{
 			os << "rook  (" << color_ << ")";
