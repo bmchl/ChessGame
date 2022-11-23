@@ -1,7 +1,7 @@
 # ChessGame
 
-hello! this is the fully playable full-stack chess game i developed using c++ and qt. 
-this game served as the final project of my class in winter 2022, and made use of all the notions we learned throughout the semester including **inheritance**, **abstract classes** and **virtual methods**, as well as **static variables** and **thrown exceptions**. 
+Hello! This is the fully playable full-stack chess game I developed using C++ and Qt. 
+This game served as the final project of my object-oriented programming class during Winter 2022, and made use of all the notions we learned throughout the semester including **inheritance**, **abstract classes** and **virtual methods**, as well as **static variables** and **thrown exceptions**. 
 
 ## Screenshots
 | End Of Game Selector                                                                                                                                                    | Main UI                                                                                                                                                                 | Highlighting possible positions for a selected piece                                                                                                                    | Check detection                                                                                                                                                         | Winner message                                                                                                                                                          |
